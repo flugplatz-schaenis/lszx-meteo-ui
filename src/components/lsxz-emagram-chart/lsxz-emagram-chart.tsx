@@ -1,7 +1,7 @@
-import { Component, Element, Prop } from '@stencil/core';
-import { Selection, select } from 'd3-selection';
+import { Component, Element, Prop } from "@stencil/core";
+import { Selection, select } from "d3-selection";
 import ResizeObserver from "resize-observer-polyfill";
-import { scaleLinear, axisBottom, axisLeft } from 'd3';
+import { scaleLinear, axisBottom, axisLeft, line, curveMonotoneX, range } from "d3";
 
 const margin: any = {
   left: 40, 
@@ -10,9 +10,15 @@ const margin: any = {
   bottom: 20
 };
 
+const minTemp: number = -25;
+const maxTemp: number = 30;
+const maxAlt: number = 4000;
+const dryAdiabateFactor: number = 0.01;
+const dryAdiabateStep: number = 5;
+
 @Component({
-  tag: 'lsxz-emagram-chart',
-  styleUrl: 'lsxz-emagram-chart.css',
+  tag: "lsxz-emagram-chart",
+  styleUrl: "lsxz-emagram-chart.css",
   shadow: false
 })
 export class LszxEmagramChart {
@@ -44,32 +50,58 @@ export class LszxEmagramChart {
     this.svg.selectAll("*").remove();
 
     let xScale = scaleLinear()
-      .domain([ 30, -20 ])
+      .domain([ minTemp, maxTemp ])
       .rangeRound([margin.left, w - margin.right]);
 
     let yScale = scaleLinear()
-      .domain([ 4000, 0 ])
+      .domain([ maxAlt, 0 ])
       .rangeRound([margin.top, h - margin.bottom]);
 
+    this.drawGrid(w, h, xScale, yScale);
+    this.drawDryAdiabates(xScale, yScale);
+  }
+
+  drawGrid(w, h, xScale, yScale) {
     const grid = this.svg.append("g").attr("class", "grid");
 
-    // x axis
     grid.append("g") // x legend
       .attr("transform", `translate(0, ${h - margin.bottom})`)
       .call(axisBottom(xScale).ticks(10).tickSize(-h + margin.top + margin.bottom));
 
-    // y axis
     grid.append("g")
       .attr("transform", `translate(${margin.left}, 0)`)
       .call(axisLeft(yScale).ticks(8).tickSize(-w + margin.right + margin.left));
+  }
 
-    const g = this.svg.append("g");
-      g.append("circle")
-        .attr("r", 5)
-        .attr("cx", w / 10)
-        .attr("cy", h / 10)
-        .attr("fill", "red");
+  drawDryAdiabates(xScale, yScale) {
+    const dryAdiabateGrid = this.svg.append("g")
+      .attr("class", "dryAdiabateGrid");
 
+    const xyLine = line()
+      .x(d => xScale(d[0]))
+      .y(d => yScale(d[1]))
+      .curve(curveMonotoneX);
+
+    range(minTemp + dryAdiabateStep, (maxTemp + (maxTemp - minTemp)), dryAdiabateStep)
+      .map(t => {
+        let x0 = t, y0 = 0;
+        let x1 = minTemp;
+        let y1 = (t-minTemp) / dryAdiabateFactor;
+        if(y1 > maxAlt) {
+          let diff = y1 - maxAlt;
+          x1 += diff * dryAdiabateFactor;
+          y1 = maxAlt;
+        }
+        if(t > maxTemp) {
+          let diff = t - maxTemp;
+          y0 += diff / dryAdiabateFactor;
+          x0 = maxTemp;
+        }
+        dryAdiabateGrid
+          .append("path")
+          .datum([[x0, y0], [x1, y1]])
+          .attr("d", xyLine);        
+      });
   }
 
   render() {

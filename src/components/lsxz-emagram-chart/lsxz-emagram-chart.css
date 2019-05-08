@@ -1,3 +1,7 @@
+lsxz-emagram-chart {
+    display: block;
+}
+
 .grid line {
     stroke: lightgrey;
     stroke-opacity: 0.7;
@@ -6,4 +10,10 @@
 
 .grid path {
     stroke-width: 0;
+}
+
+.dryAdiabateGrid path {
+    fill: none;
+    stroke: lightgreen;
+    stroke-opacity: 0.7;
 }
