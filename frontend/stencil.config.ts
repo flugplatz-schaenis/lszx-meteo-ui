@@ -11,6 +11,6 @@ export const config: Config = {
     }
   ],
   copy: [
-    { src: "*.json" }
+    { src: "*.woff" }
   ]
 };

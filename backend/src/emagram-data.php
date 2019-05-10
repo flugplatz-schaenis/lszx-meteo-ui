@@ -8,9 +8,10 @@
     array_map(function($s) {
       $dtSubstring = substr($s, strlen(SNAPSHOT_PREFIX)+1, strlen($s) - strlen(SNAPSHOT_PREFIX) - 6);
       $dt = DateTime::createFromFormat(SNAPSHOT_DATETIME_PATTERN, $dtSubstring);
+      $dt->setTimezone(new DateTimeZone("Europe/Zurich"));
       return (object)[
         "dt" => $dt->format(DateTime::ATOM),
-        "path" => SNAPSHOT_DIR."/".$s,
+        "url" => getSnapshotFullUrl($s)
       ];
     },
     array_filter($snapshots, function($s) {
@@ -22,4 +23,9 @@
 
   header('Content-Type: application/json');
   echo(json_encode($meta));
+
+  function getSnapshotFullUrl($s) {
+    return ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : "http://")
+              .$_SERVER["HTTP_HOST"].dirname($_SERVER["PHP_SELF"]).SNAPSHOT_DIR."/".$s;
+  }
 ?>

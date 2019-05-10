@@ -1,19 +1,32 @@
 lsxz-emagram-chart {
-    display: block;
+  display: block;
+  color: white;
 }
 
 .grid line {
-    stroke: lightgrey;
-    stroke-opacity: 0.7;
-    shape-rendering: crispEdges;
+  stroke: lightgrey;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
 }
 
 .grid path {
-    stroke-width: 0;
+  stroke-width: 0;
 }
 
 .dryAdiabateGrid path {
-    fill: none;
-    stroke: lightgreen;
-    stroke-opacity: 0.7;
+  fill: none;
+  stroke: lightgreen;
+  stroke-opacity: 0.7;
+}
+
+.temperature circle {
+  fill: lightcoral;
+  fill-opacity: 0.7;
+}
+
+.temperature path {
+  fill: none;
+  stroke: lightcoral;
+  stroke-width: 3;
+  stroke-opacity: 0.7;
 }

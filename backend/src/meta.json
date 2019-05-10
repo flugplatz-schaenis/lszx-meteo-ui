@@ -3,6 +3,10 @@
     "all": {
       "title": "Ganze Schweiz",
       "stations": [ "KLO", "LAE", "HOE", "NAP", "PIL", "SAE", "WFJ", "COV", "JUN" ]
+    },
+    "test": {
+      "title": "Test",
+      "stations": [ "KLO", "LAE" ]
     }
   },
   "stations": {

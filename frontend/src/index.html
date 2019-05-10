@@ -5,12 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
   <title>Stencil Component Starter</title>
   <script src="/build/lszx-meteo-ui.js"></script>
-
+  <style type="text/css">
+  @font-face {
+    font-family: 'DINPro-Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('DINPro-Regular'), url('DINPro-Regular_13937.woff') format('woff');
+  }
+  body {
+    background-color: #043a53;
+    font-family:'DINPro-Regular';
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+  }
+  </style>
 </head>
 <body>
-
-  <div style="max-width: 500px; width: 100%;">
-    <lsxz-emagram datasrc="./mock.json"></lszx-emagram>
+  <div style="width: 80%; margin: 0 auto;">
+    <lsxz-emagram datasrc="http://localhost:5100/emagram-data.php"></lszx-emagram>
   </div>
 
 </body>
