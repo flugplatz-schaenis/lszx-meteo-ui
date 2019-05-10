@@ -1,0 +1,64 @@
+{
+  "regions": {
+    "all": {
+      "title": "Ganze Schweiz",
+      "stations": [ "KLO", "LAE", "HOE", "NAP", "PIL", "SAE", "WFJ", "COV", "JUN" ]
+    }
+  },
+  "stations": {
+    "KLO": {
+      "name": "Kloten",
+      "lat": 47.479611,
+      "lon": 8.53595,
+      "alt": 426
+    },
+    "LAE": {
+      "name": "Lägern",
+      "lat": 47.481936,
+      "lon": 8.397208,
+      "alt": 845
+    },
+    "HOE": {
+      "name": "Hörnli",
+      "lat": 47.370864,
+      "lon": 8.941633,
+      "alt": 1144
+    },
+    "NAP": {
+      "name": "Napf",
+      "lat": 47.004667,
+      "lon": 7.940111,
+      "alt": 1404
+    },
+    "PIL": {
+      "name": "Pilatus",
+      "lat": 46.978872,
+      "lon": 8.252258,
+      "alt": 2106
+    },
+    "SAE": {
+      "name": "Säntis",
+      "lat": 47.249431,
+      "lon": 9.343417,
+      "alt": 2502
+    },
+    "WFJ": {
+      "name": "Weissfluhjoch",
+      "lat": 46.833328,
+      "lon": 9.806383,
+      "alt": 2691
+    },
+    "COV": {
+      "name": "Piz Corvatsch",
+      "lat": 46.418019,
+      "lon": 9.821242,
+      "alt": 3302
+    },
+    "JUN": {
+      "name": "Jungfraujoch",
+      "lat": 46.547447,
+      "lon": 7.985331,
+      "alt": 3580
+    }
+  }
+}
