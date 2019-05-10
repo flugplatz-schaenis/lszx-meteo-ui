@@ -13,6 +13,7 @@
   define("SNAPSHOT_DIR", "snapshots");
   define("SNAPSHOT_PREFIX", "stations-snapshot");
   define("SNAPSHOT_RETENTION", "PT24H"); // https://www.php.net/manual/de/datetime.sub.php
+  define("SNAPSHOT_DATETIME_PATTERN", "Ymd-Hi");
 
   function getMeta() {
     $metaFileContents = file_get_contents("meta.json");

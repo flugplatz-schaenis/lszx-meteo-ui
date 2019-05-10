@@ -39,7 +39,7 @@
       }
       else if(array_search($stationKey, $stationKeys) !== FALSE) { // a station of interest
 
-        $dt = DateTime::createFromFormat('YmdHi', $parts[$timeIdx]);
+        $dt = DateTime::createFromFormat("YmdHi", $parts[$timeIdx]);
         if($dt > $maxDt)
           $maxDt = $dt;
 
@@ -90,7 +90,7 @@
   ]));
 
   function getFilename($dt) {
-    return SNAPSHOT_PREFIX."-".$dt->format("Ymd-Hi").".json";
+    return SNAPSHOT_PREFIX."-".$dt->format(SNAPSHOT_DATETIME_PATTERN).".json";
   }
 
 ?>

@@ -6,7 +6,12 @@
   $snapshots = scandir(SNAPSHOT_DIR);
   $snapshotUrls =
     array_map(function($s) {
-      return SNAPSHOT_DIR."/".$s;
+      $dtSubstring = substr($s, strlen(SNAPSHOT_PREFIX)+1, strlen($s) - strlen(SNAPSHOT_PREFIX) - 6);
+      $dt = DateTime::createFromFormat(SNAPSHOT_DATETIME_PATTERN, $dtSubstring);
+      return (object)[
+        "dt" => $dt->format(DateTime::ATOM),
+        "path" => SNAPSHOT_DIR."/".$s,
+      ];
     },
     array_filter($snapshots, function($s) {
       return substr($s, 0, strlen(SNAPSHOT_PREFIX)) === SNAPSHOT_PREFIX;
