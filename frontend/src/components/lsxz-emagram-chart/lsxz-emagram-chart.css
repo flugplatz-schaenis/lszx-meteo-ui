@@ -5,7 +5,7 @@ lsxz-emagram-chart {
 
 .grid line {
   stroke: lightgrey;
-  stroke-opacity: 0.7;
+  stroke-opacity: 0.5;
   shape-rendering: crispEdges;
 }
 
@@ -16,17 +16,17 @@ lsxz-emagram-chart {
 .dryAdiabateGrid path {
   fill: none;
   stroke: lightgreen;
-  stroke-opacity: 0.7;
+  stroke-opacity: 0.5;
 }
 
 .temperature circle {
   fill: lightcoral;
-  fill-opacity: 0.7;
+  fill-opacity: 1;
 }
 
 .temperature path {
   fill: none;
   stroke: lightcoral;
   stroke-width: 3;
-  stroke-opacity: 0.7;
+  stroke-opacity: 1;
 }
