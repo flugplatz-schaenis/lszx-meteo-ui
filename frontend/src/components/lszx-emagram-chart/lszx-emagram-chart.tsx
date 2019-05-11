@@ -27,7 +27,6 @@ export class LszxEmagramChart {
   @Prop() data: any;
 
   componentDidLoad() {
-    console.log("chart: componentDidLoad");
     this.ro = new ResizeObserver(entries => {
       const bounds = entries[0].contentRect;
       const w = bounds.width;

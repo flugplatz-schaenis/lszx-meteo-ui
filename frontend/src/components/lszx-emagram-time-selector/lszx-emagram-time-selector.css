@@ -1,0 +1,15 @@
+lszx-emagram-time-selector {
+  display: block;
+  color: white;
+}
+
+.timeline line,
+.timeline path {
+  stroke: lightgrey;
+  stroke-opacity: 0.5;
+  shape-rendering: crispEdges;
+}
+
+.currentSnapshotMarker rect {
+  fill: white;
+}
