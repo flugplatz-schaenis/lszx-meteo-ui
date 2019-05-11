@@ -1,9 +1,8 @@
 import { Component, Prop, State } from "@stencil/core";
-import { format } from "date-fns";
 
 @Component({
-  tag: "lsxz-emagram",
-  styleUrl: "lsxz-emagram.css",
+  tag: "lszx-emagram",
+  styleUrl: "lszx-emagram.css",
   shadow: false
 })
 export class LszxEmagram {
@@ -72,11 +71,8 @@ export class LszxEmagram {
             {Object.keys(this.regions).map(k =>
               (<option value={k}>{this.regions[k].title}</option>))}
           </select>
-          <select onChange={e => this.snapshotSelected((e.target as HTMLSelectElement).value)}>
-            {this.snapshots.map(s =>
-              (<option value={s.url}>{format(s.dt, "D.M. HH:mm")}</option>))}
-          </select>
-          <lsxz-emagram-chart data={this.chartData}></lsxz-emagram-chart>
+          <lszx-emagram-time-selector snapshots={this.snapshots} onSnapshotSelected={s => this.snapshotSelected(s.detail)}></lszx-emagram-time-selector>
+          <lszx-emagram-chart data={this.chartData}></lszx-emagram-chart>
         </div>
     );
   }

@@ -11,8 +11,8 @@ const dryAdiabateFactor: number = 0.01;
 const dryAdiabateStep: number = 5;
 
 @Component({
-  tag: "lsxz-emagram-chart",
-  styleUrl: "lsxz-emagram-chart.css",
+  tag: "lszx-emagram-chart",
+  styleUrl: "lszx-emagram-chart.css",
   shadow: false
 })
 export class LszxEmagramChart {

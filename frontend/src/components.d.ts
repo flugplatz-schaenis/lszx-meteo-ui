@@ -12,53 +12,71 @@ import '@stencil/core';
 
 export namespace Components {
 
-  interface LsxzEmagramChart {
+  interface LszxEmagramChart {
     'data': any;
   }
-  interface LsxzEmagramChartAttributes extends StencilHTMLAttributes {
+  interface LszxEmagramChartAttributes extends StencilHTMLAttributes {
     'data'?: any;
   }
 
-  interface LsxzEmagram {
+  interface LszxEmagramTimeSelector {
+    'snapshots': any[];
+  }
+  interface LszxEmagramTimeSelectorAttributes extends StencilHTMLAttributes {
+    'onSnapshotSelected'?: (event: CustomEvent) => void;
+    'snapshots'?: any[];
+  }
+
+  interface LszxEmagram {
     'datasrc': string;
   }
-  interface LsxzEmagramAttributes extends StencilHTMLAttributes {
+  interface LszxEmagramAttributes extends StencilHTMLAttributes {
     'datasrc'?: string;
   }
 }
 
 declare global {
   interface StencilElementInterfaces {
-    'LsxzEmagramChart': Components.LsxzEmagramChart;
-    'LsxzEmagram': Components.LsxzEmagram;
+    'LszxEmagramChart': Components.LszxEmagramChart;
+    'LszxEmagramTimeSelector': Components.LszxEmagramTimeSelector;
+    'LszxEmagram': Components.LszxEmagram;
   }
 
   interface StencilIntrinsicElements {
-    'lsxz-emagram-chart': Components.LsxzEmagramChartAttributes;
-    'lsxz-emagram': Components.LsxzEmagramAttributes;
+    'lszx-emagram-chart': Components.LszxEmagramChartAttributes;
+    'lszx-emagram-time-selector': Components.LszxEmagramTimeSelectorAttributes;
+    'lszx-emagram': Components.LszxEmagramAttributes;
   }
 
 
-  interface HTMLLsxzEmagramChartElement extends Components.LsxzEmagramChart, HTMLStencilElement {}
-  var HTMLLsxzEmagramChartElement: {
-    prototype: HTMLLsxzEmagramChartElement;
-    new (): HTMLLsxzEmagramChartElement;
+  interface HTMLLszxEmagramChartElement extends Components.LszxEmagramChart, HTMLStencilElement {}
+  var HTMLLszxEmagramChartElement: {
+    prototype: HTMLLszxEmagramChartElement;
+    new (): HTMLLszxEmagramChartElement;
   };
 
-  interface HTMLLsxzEmagramElement extends Components.LsxzEmagram, HTMLStencilElement {}
-  var HTMLLsxzEmagramElement: {
-    prototype: HTMLLsxzEmagramElement;
-    new (): HTMLLsxzEmagramElement;
+  interface HTMLLszxEmagramTimeSelectorElement extends Components.LszxEmagramTimeSelector, HTMLStencilElement {}
+  var HTMLLszxEmagramTimeSelectorElement: {
+    prototype: HTMLLszxEmagramTimeSelectorElement;
+    new (): HTMLLszxEmagramTimeSelectorElement;
+  };
+
+  interface HTMLLszxEmagramElement extends Components.LszxEmagram, HTMLStencilElement {}
+  var HTMLLszxEmagramElement: {
+    prototype: HTMLLszxEmagramElement;
+    new (): HTMLLszxEmagramElement;
   };
 
   interface HTMLElementTagNameMap {
-    'lsxz-emagram-chart': HTMLLsxzEmagramChartElement
-    'lsxz-emagram': HTMLLsxzEmagramElement
+    'lszx-emagram-chart': HTMLLszxEmagramChartElement
+    'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement
+    'lszx-emagram': HTMLLszxEmagramElement
   }
 
   interface ElementTagNameMap {
-    'lsxz-emagram-chart': HTMLLsxzEmagramChartElement;
-    'lsxz-emagram': HTMLLsxzEmagramElement;
+    'lszx-emagram-chart': HTMLLszxEmagramChartElement;
+    'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement;
+    'lszx-emagram': HTMLLszxEmagramElement;
   }
 
 
