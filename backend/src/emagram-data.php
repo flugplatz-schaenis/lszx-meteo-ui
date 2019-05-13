@@ -25,7 +25,8 @@
   echo(json_encode($meta));
 
   function getSnapshotFullUrl($s) {
-    return ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : "http://")
-              .$_SERVER["HTTP_HOST"].dirname($_SERVER["PHP_SELF"]).SNAPSHOT_DIR."/".$s;
+    $base = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : "http://")
+              .$_SERVER["HTTP_HOST"].dirname($_SERVER["PHP_SELF"]);
+    return rtrim($base, "/")."/".SNAPSHOT_DIR."/".$s;
   }
 ?>

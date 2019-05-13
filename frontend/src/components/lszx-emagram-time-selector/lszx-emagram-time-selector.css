@@ -10,6 +10,10 @@ lszx-emagram-time-selector {
   shape-rendering: crispEdges;
 }
 
-.currentSnapshotMarker rect {
+.snapshotMarker rect {
   fill: white;
+}
+
+.snapshotMarker rect.current {
+  fill: red;
 }

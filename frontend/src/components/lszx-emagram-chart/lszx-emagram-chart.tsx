@@ -2,6 +2,7 @@ import { Component, Element, Prop } from "@stencil/core";
 import { Selection, select } from "d3-selection";
 import ResizeObserver from "resize-observer-polyfill";
 import { scaleLinear, axisBottom, axisLeft, line, curveMonotoneX, range, ScaleLinear } from "d3";
+import { calcWindParts } from "../../utils/utils";
 
 const margin: any = { left: 40, right: 10, top: 10, bottom: 20 };
 const minTemp: number = -25;
@@ -107,6 +108,8 @@ export class LszxEmagramChart {
   drawChartData() {
     this.svg.selectAll(".data").remove();
     this.drawTemperature();
+    this.drawDewpoint();
+    this.drawWindArrows();
   }
 
   drawTemperature() {
@@ -128,6 +131,85 @@ export class LszxEmagramChart {
     stations.append("path")
       .datum(this.data.map(d => [ d.temperature, d.alt ]))
       .attr("d", xyLine);
+  }
+
+  drawDewpoint() {
+    const stations = this.svg.append("g")
+      .attr("class", "data dewpoint");
+
+    // dewpoint points
+    this.data.forEach(s => {
+      stations.append("circle")
+        .attr("cx", this.xScale(s.dewpoint))
+        .attr("cy", this.yScale(s.alt))
+        .attr("r", 3);
+    });
+
+    // dewpoint line
+    const xyLine = line()
+      .x(d => this.xScale(d[0]))
+      .y(d => this.yScale(d[1]));
+    stations.append("path")
+      .datum(this.data.map(d => [ d.dewpoint, d.alt ]))
+      .attr("d", xyLine);
+  }
+
+  drawWindArrows() {
+    const windArrows = this.svg.append("g")
+      .attr("class", "data wind");
+
+    this.data.forEach(s => {
+
+      let windParts = calcWindParts(s.windSpeed);
+      let x = this.xScale(27.5);
+      let y = this.yScale(s.alt);
+
+      let windArrow = windArrows.append("g")
+        .attr("class", "arrow")
+        .attr("transform", `translate(${x} ${y}) rotate(${-90 + s.windDirection})`);
+
+      // base line
+
+      // circle if < 5 knots
+      if(windParts.symbols == 0) {
+        windArrow.append("circle")
+          .attr("cx", 0)
+          .attr("cy", 0)
+          .attr("r", 6);
+      }
+      else {
+        let windArrowSize = this.xScale(2) - this.xScale(0); // width: around 2°C ;)
+        let windArrowX = -windArrowSize/2;
+
+        // base line
+        windArrow.append("line")
+          .attr("x1", windArrowX).attr("y1", "0")
+          .attr("x2", -windArrowX).attr("y2", "0");
+
+        // triangles (50knots)
+        for(let i=0; i<windParts.triangles; i++) {
+          windArrow.append("path")
+            .attr("d", `M ${windArrowX},0 L ${windArrowX-(5/30 * windArrowSize)} 0 L ${windArrowX-(2/30 * windArrowSize)} ${(-1/3) * windArrowSize} L ${windArrowX+2} 0`);
+          windArrowX += 8;
+        }
+
+        // large dashes (10knots)
+        for(let i=0; i<windParts.largeDashes; i++) {
+          windArrow.append("line")
+            .attr("x1", windArrowX).attr("y1", "0")
+            .attr("x2", windArrowX-(1/10 * windArrowSize)).attr("y2", (-12/30 * windArrowSize));
+          windArrowX += 5;
+        }
+
+        // small dashes (5knots)
+        for(let i=0; i<windParts.smallDashes; i++) {
+          windArrow.append("line")
+            .attr("x1", windArrowX).attr("y1", "0")
+            .attr("x2", windArrowX-(2/30 * windArrowSize)).attr("y2", (-8/30 * windArrowSize));
+          windArrowX += 5;
+        }
+      }
+    });
   }
 
   render() {

@@ -5,7 +5,7 @@ import { scaleTime, ScaleTime, axisTop, range } from "d3";
 import { format } from "date-fns";
 
 const margin: any = { left: 10, right: 10, top: 5, bottom: 5 };
-const hourWidth: number = 35;
+const minHourWidth: number = 35;
 
 @Component({
   tag: "lszx-emagram-time-selector",
@@ -20,6 +20,8 @@ export class LszxEmagramTimeSelector {
   timeScale: ScaleTime<number, number>;
   ro: ResizeObserver;
   w: number;
+  from: Date;
+  to: Date;
 
   @Prop() snapshots: any[];
   @State() selectedSnapshot: any;
@@ -62,33 +64,38 @@ export class LszxEmagramTimeSelector {
   }
 
   drawTimeSelector() {
+    if(!this.svg)
+      return;
+
     this.svg.selectAll("*").remove();
 
     if(!this.snapshots || this.snapshots.length == 0)
       return;
 
     // get bounds
-    let from = new Date(this.snapshots[0].dt);
-    let to = new Date(this.snapshots[this.snapshots.length - 1].dt);
+    this.from = new Date(this.snapshots[0].dt);
+    this.to = new Date(this.snapshots[this.snapshots.length - 1].dt);
 
     // floor / ceil to full hour
-    from.setTime(Math.floor(from.getTime() / 3600000) * 3600000);
-    to.setTime(Math.ceil(to.getTime() / 3600000) * 3600000);
+    this.from.setTime(Math.floor(this.from.getTime() / 3600000) * 3600000);
+    this.to.setTime(Math.ceil(this.to.getTime() / 3600000) * 3600000);
 
-    const totalHours = (to.getTime() - from.getTime()) / 1000 / 3600;
+    const totalHours = (this.to.getTime() - this.from.getTime()) / 1000 / 3600;
+    const totalWidth = Math.max(this.w - margin.left - margin.right, (totalHours * minHourWidth));
 
     this.timeScale = scaleTime()
-      .domain([ from, to ])
-      .range([margin.left, (totalHours * hourWidth) + margin.left]);
+      .domain([ this.from, this.to ])
+      .range([margin.left, totalWidth + margin.left]);
 
     const parent = this.svg.append("g")
       .attr("class", "parent");
 
-    this.drawTimeline(parent, from, to);
-    this.drawCurrentSnapshotMarker(parent);
+    this.drawTimeline(parent);
+    this.drawSnapshotMarkers(parent);
+    this.shiftToCurrentShapshot(parent);
   }
 
-  drawTimeline(parent, from, to) {
+  drawTimeline(parent) {
     const timeline = parent.append("g")
       .attr("class", "timeline");
 
@@ -96,7 +103,7 @@ export class LszxEmagramTimeSelector {
       .attr("class", "axis")
       .attr("transform", "translate(0, 45)")
       .call(axisTop(this.timeScale)
-        .tickValues(range(from.getTime(), to.getTime(), 1800000))
+        .tickValues(range(this.from.getTime(), this.to.getTime(), 1800000))
         .tickFormat((d: number) => format(d, 'HH:mm')));
 
     axis.selectAll("text")
@@ -107,26 +114,32 @@ export class LszxEmagramTimeSelector {
         .style("text-anchor", "start");
   }
 
-  drawCurrentSnapshotMarker(parent) {
-    const currentSnapshotMarker = parent.append("g")
-      .attr("class", "currentSnapshotMarker");
+  drawSnapshotMarkers(parent) {
+    const snapshotMarker = parent.append("g")
+      .attr("class", "snapshotMarker");
 
-    const curX = this.timeScale(new Date(this.selectedSnapshot.dt));
-
-    currentSnapshotMarker.append("rect")
-      .attr("width", 8)
-      .attr("height", 8)
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("transform", `translate(${curX}, 40) rotate(45)`);
-
-    const shift = curX - this.w / 2;
-    parent.attr("transform", `translate(${-shift}, 0)`);
+    this.snapshots.forEach(s => {
+      const current = this.selectedSnapshot.dt == s.dt;
+      snapshotMarker.append("rect")
+        .attr("width", 8)
+        .attr("height", 8)
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("class", current ? "current" : null)
+        .attr("transform", `translate(${this.timeScale(new Date(s.dt))+0.5}, 40) rotate(45)`)
+        .on("click", () => {
+          this.selectedSnapshot = s;
+          this.snapshotSelected.emit(s.url);
+        });
+    });
   }
 
-  fireSnapshotSelected(url) {
-    // TODO: URL only?
-    this.snapshotSelected.emit(url);
+  shiftToCurrentShapshot(parent) {
+    const curX = this.timeScale(new Date(this.selectedSnapshot.dt));
+    const seriesWidth = this.timeScale(this.to);
+    let shift = curX - seriesWidth / 2;
+    shift = Math.max(0, Math.min(shift, seriesWidth - this.w + margin.left));
+    parent.attr("transform", `translate(${-shift}, 0)`);
   }
 
   render() {

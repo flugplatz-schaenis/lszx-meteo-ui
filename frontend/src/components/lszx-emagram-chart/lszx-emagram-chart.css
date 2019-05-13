@@ -30,3 +30,33 @@ lszx-emagram-chart {
   stroke-width: 3;
   stroke-opacity: 1;
 }
+
+.dewpoint circle {
+  fill: lightblue;
+  fill-opacity: 1;
+}
+
+.dewpoint path {
+  fill: none;
+  stroke: lightblue;
+  stroke-width: 3;
+  stroke-opacity: 1;
+}
+
+.wind .arrow line  {
+  fill: none;
+  stroke: lightcoral;
+  stroke-width: 2;
+}
+
+.wind .arrow path {
+  fill: lightcoral;
+  stroke: lightcoral;
+  stroke-width: 2;
+}
+
+.wind .arrow circle  {
+  fill: none;
+  stroke: lightcoral;
+  stroke-width: 2;
+}
