@@ -1,11 +1,12 @@
 import { Component, Prop, Event, Element, EventEmitter, State } from "@stencil/core";
 import { Selection, select } from "d3-selection";
 import ResizeObserver from "resize-observer-polyfill";
-import { scaleTime, ScaleTime, axisTop, range } from "d3";
+import { scaleTime, ScaleTime, axisTop, range, event } from "d3";
 import { format } from "date-fns";
 
 const margin: any = { left: 10, right: 10, top: 5, bottom: 5 };
 const minHourWidth: number = 35;
+const height: number = 55;
 
 @Component({
   tag: "lszx-emagram-time-selector",
@@ -34,7 +35,7 @@ export class LszxEmagramTimeSelector {
 
       this.svg = select(this.svgElementRef);
       this.svgElementRef.setAttribute("width", `${this.w}`);
-      this.svgElementRef.setAttribute("height", `55`);
+      this.svgElementRef.setAttribute("height", `${height}`);
 
       this.drawTimeSelector();
     });
@@ -93,6 +94,24 @@ export class LszxEmagramTimeSelector {
     this.drawTimeline(parent);
     this.drawSnapshotMarkers(parent);
     this.shiftToCurrentShapshot(parent);
+
+    parent.append("rect")
+      .attr("class", "clickTgt")
+      .attr("x", 0).attr("y", 0)
+      .attr("width", totalWidth + margin.left + margin.right).attr("height", height)
+      .on("click", this.clickTargetHit.bind(this));
+  }
+
+  clickTargetHit() {
+    const clickTime = this.timeScale.invert(event.offsetX).getTime();
+
+    // get closest snapshot
+    let closest = this.snapshots
+      .reduce((prev, curr) =>
+        (Math.abs(new Date(curr.dt).getTime() - clickTime) < Math.abs(new Date(prev.dt).getTime() - clickTime) ? curr : prev));
+
+    this.selectedSnapshot = closest;
+    this.snapshotSelected.emit(closest.url);
   }
 
   drawTimeline(parent) {
@@ -103,7 +122,7 @@ export class LszxEmagramTimeSelector {
       .attr("class", "axis")
       .attr("transform", "translate(0, 45)")
       .call(axisTop(this.timeScale)
-        .tickValues(range(this.from.getTime(), this.to.getTime(), 1800000))
+        .tickValues(range(this.from.getTime(), this.to.getTime() + 1, 1800000))
         .tickFormat((d: number) => format(d, 'HH:mm')));
 
     axis.selectAll("text")
@@ -126,11 +145,7 @@ export class LszxEmagramTimeSelector {
         .attr("x", 0)
         .attr("y", 0)
         .attr("class", current ? "current" : null)
-        .attr("transform", `translate(${this.timeScale(new Date(s.dt))+0.5}, 40) rotate(45)`)
-        .on("click", () => {
-          this.selectedSnapshot = s;
-          this.snapshotSelected.emit(s.url);
-        });
+        .attr("transform", `translate(${this.timeScale(new Date(s.dt))+0.5}, 40) rotate(45)`);
     });
   }
 
@@ -146,7 +161,7 @@ export class LszxEmagramTimeSelector {
     if(!this.snapshots)
       return (<div></div>);
 
-    const descriptionText = `Zeitauswahl aus Snapshots: ${this.snapshots}`;
+    const descriptionText = `Zeitauswahl aus Snapshots: ${this.snapshots.map(s => s.dt)}`;
     return (
         <svg className="container" width="100%" height="1" aria-label={descriptionText}
            ref={(ref: SVGSVGElement) => this.svgElementRef = ref}>

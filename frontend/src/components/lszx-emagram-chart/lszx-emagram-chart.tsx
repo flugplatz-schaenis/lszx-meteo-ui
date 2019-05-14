@@ -10,6 +10,9 @@ const maxTemp: number = 30;
 const maxAlt: number = 4000;
 const dryAdiabateFactor: number = 0.01;
 const dryAdiabateStep: number = 5;
+const textTempOffset: number = 14;
+const windArrowTempY: number = 27.5;
+const windArrowTextOffset: number = -28;
 
 @Component({
   tag: "lszx-emagram-chart",
@@ -107,9 +110,23 @@ export class LszxEmagramChart {
 
   drawChartData() {
     this.svg.selectAll(".data").remove();
+    this.drawStationNames();
     this.drawTemperature();
     this.drawDewpoint();
     this.drawWindArrows();
+    this.drawWindData();
+  }
+
+  drawStationNames() {
+    const stationNames = this.svg.append("g")
+      .attr("class", "data stationtexts");
+
+      this.data.forEach(s => {
+      stationNames.append("text")
+        .attr("x", this.xScale(s.temperature) + textTempOffset)
+        .attr("y", this.yScale(s.alt) + 5)
+        .text(`${s.stationName} (${s.alt}m)`);
+    });
   }
 
   drawTemperature() {
@@ -161,7 +178,7 @@ export class LszxEmagramChart {
     this.data.forEach(s => {
 
       let windParts = calcWindParts(s.windSpeed);
-      let x = this.xScale(27.5);
+      let x = this.xScale(windArrowTempY);
       let y = this.yScale(s.alt);
 
       let windArrow = windArrows.append("g")
@@ -210,6 +227,22 @@ export class LszxEmagramChart {
         }
       }
     });
+  }
+
+  drawWindData() {
+    const stationNames = this.svg.append("g")
+    .attr("class", "data winddata");
+
+    this.data.forEach(s => {
+      stationNames.append("text")
+        .attr("x", this.xScale(windArrowTempY) + windArrowTextOffset)
+        .attr("y", this.yScale(s.alt) - 4)
+        .html(s.windDirection);
+      stationNames.append("text")
+        .attr("x", this.xScale(windArrowTempY) + windArrowTextOffset)
+        .attr("y", this.yScale(s.alt) + 8)
+        .html(`${s.windSpeed} / ${s.windGusts}`);
+      });
   }
 
   render() {

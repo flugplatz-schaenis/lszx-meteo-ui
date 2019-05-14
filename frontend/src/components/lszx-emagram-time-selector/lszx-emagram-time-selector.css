@@ -17,3 +17,7 @@ lszx-emagram-time-selector {
 .snapshotMarker rect.current {
   fill: red;
 }
+
+.clickTgt {
+  fill: transparent;
+}

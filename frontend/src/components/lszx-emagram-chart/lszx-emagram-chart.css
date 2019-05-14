@@ -60,3 +60,13 @@ lszx-emagram-chart {
   stroke: lightcoral;
   stroke-width: 2;
 }
+
+.stationtexts text {
+  fill: lightcyan;
+}
+
+.winddata text {
+  font-size: 12px;
+  text-anchor: end;
+  fill: lightcyan;
+}
