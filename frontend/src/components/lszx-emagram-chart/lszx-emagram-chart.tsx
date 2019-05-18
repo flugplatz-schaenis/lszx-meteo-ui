@@ -1,4 +1,4 @@
-import { Component, Element, Prop } from "@stencil/core";
+import { h, Component, Element, Prop } from "@stencil/core";
 import { Selection, select } from "d3-selection";
 import ResizeObserver from "resize-observer-polyfill";
 import { scaleLinear, axisBottom, axisLeft, line, curveMonotoneX, range, ScaleLinear } from "d3";
@@ -254,8 +254,8 @@ export class LszxEmagramChart {
     const descriptionText = `Emagramm der Messstationen: ${this.data.map(d => d.station)}`;
 
     return (
-      <svg className="container" width="100%" height="1" aria-label={descriptionText}
-           ref={(ref: SVGSVGElement) => this.svgElementRef = ref}>
+      <svg class="container" width="100%" height="1" aria-label={descriptionText}
+           ref={el => this.svgElementRef = el}>
       </svg>
     );
   }

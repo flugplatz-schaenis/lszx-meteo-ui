@@ -5,49 +5,60 @@
  */
 
 
-import '@stencil/core';
-
-
+import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
+import { JSX } from '@stencil/core';
 
 
 export namespace Components {
-
-  interface LszxEmagramChart {
-    'data': any;
-  }
-  interface LszxEmagramChartAttributes extends StencilHTMLAttributes {
-    'data'?: any;
-  }
-
-  interface LszxEmagramTimeSelector {
-    'snapshots': any[];
-  }
-  interface LszxEmagramTimeSelectorAttributes extends StencilHTMLAttributes {
-    'onSnapshotSelected'?: (event: CustomEvent) => void;
-    'snapshots'?: any[];
-  }
-
   interface LszxEmagram {
     'datasrc': string;
   }
-  interface LszxEmagramAttributes extends StencilHTMLAttributes {
-    'datasrc'?: string;
+  interface LszxEmagramChart {
+    'data': any;
+  }
+  interface LszxEmagramTimeSelector {
+    'snapshots': any[];
   }
 }
 
+declare namespace LocalJSX {
+  interface LszxEmagram extends JSXBase.HTMLAttributes {
+    'datasrc'?: string;
+  }
+  interface LszxEmagramChart extends JSXBase.HTMLAttributes {
+    'data'?: any;
+  }
+  interface LszxEmagramTimeSelector extends JSXBase.HTMLAttributes {
+    'onSnapshotSelected'?: (event: CustomEvent<any>) => void;
+    'snapshots'?: any[];
+  }
+
+  interface IntrinsicElements {
+    'lszx-emagram': LszxEmagram;
+    'lszx-emagram-chart': LszxEmagramChart;
+    'lszx-emagram-time-selector': LszxEmagramTimeSelector;
+  }
+}
+
+export { LocalJSX as JSX };
+
+
+declare module "@stencil/core" {
+  export namespace JSX {
+    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
+  }
+}
+
+
 declare global {
-  interface StencilElementInterfaces {
-    'LszxEmagramChart': Components.LszxEmagramChart;
-    'LszxEmagramTimeSelector': Components.LszxEmagramTimeSelector;
-    'LszxEmagram': Components.LszxEmagram;
-  }
 
-  interface StencilIntrinsicElements {
-    'lszx-emagram-chart': Components.LszxEmagramChartAttributes;
-    'lszx-emagram-time-selector': Components.LszxEmagramTimeSelectorAttributes;
-    'lszx-emagram': Components.LszxEmagramAttributes;
-  }
 
+
+  interface HTMLLszxEmagramElement extends Components.LszxEmagram, HTMLStencilElement {}
+  var HTMLLszxEmagramElement: {
+    prototype: HTMLLszxEmagramElement;
+    new (): HTMLLszxEmagramElement;
+  };
 
   interface HTMLLszxEmagramChartElement extends Components.LszxEmagramChart, HTMLStencilElement {}
   var HTMLLszxEmagramChartElement: {
@@ -61,31 +72,12 @@ declare global {
     new (): HTMLLszxEmagramTimeSelectorElement;
   };
 
-  interface HTMLLszxEmagramElement extends Components.LszxEmagram, HTMLStencilElement {}
-  var HTMLLszxEmagramElement: {
-    prototype: HTMLLszxEmagramElement;
-    new (): HTMLLszxEmagramElement;
-  };
-
   interface HTMLElementTagNameMap {
-    'lszx-emagram-chart': HTMLLszxEmagramChartElement
-    'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement
-    'lszx-emagram': HTMLLszxEmagramElement
-  }
-
-  interface ElementTagNameMap {
+    'lszx-emagram': HTMLLszxEmagramElement;
     'lszx-emagram-chart': HTMLLszxEmagramChartElement;
     'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement;
-    'lszx-emagram': HTMLLszxEmagramElement;
   }
 
-
-  export namespace JSX {
-    export interface Element {}
-    export interface IntrinsicElements extends StencilIntrinsicElements {
-      [tagName: string]: any;
-    }
-  }
-  export interface HTMLAttributes extends StencilHTMLAttributes {}
-
+  interface ElementTagNameMap extends HTMLElementTagNameMap {}
 }
+

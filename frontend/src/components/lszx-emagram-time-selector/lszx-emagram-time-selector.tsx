@@ -1,4 +1,4 @@
-import { Component, Prop, Event, Element, EventEmitter, State } from "@stencil/core";
+import { h, Component, Prop, Event, Element, EventEmitter, State } from "@stencil/core";
 import { Selection, select } from "d3-selection";
 import ResizeObserver from "resize-observer-polyfill";
 import { scaleTime, ScaleTime, axisTop, range, event } from "d3";
@@ -163,13 +163,9 @@ export class LszxEmagramTimeSelector {
 
     const descriptionText = `Zeitauswahl aus Snapshots: ${this.snapshots.map(s => s.dt)}`;
     return (
-        <svg className="container" width="100%" height="1" aria-label={descriptionText}
-           ref={(ref: SVGSVGElement) => this.svgElementRef = ref}>
+        <svg class="container" width="100%" height="1" aria-label={descriptionText}
+           ref={ref => this.svgElementRef = ref}>
         </svg>
     );
-    /* <select onChange={e => this.fireSnapshotSelected((e.target as HTMLSelectElement).value)}>
-      {this.snapshots.map(s =>
-        (<option value={s.url}>{format(s.dt, "D.M. HH:mm")}</option>))}
-    </select> */
   }
 }
