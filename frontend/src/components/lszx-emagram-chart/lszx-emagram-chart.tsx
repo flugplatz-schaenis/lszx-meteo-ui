@@ -1,18 +1,19 @@
 import { Component, Element, Prop } from "@stencil/core";
 import { Selection, select } from "d3-selection";
-import ResizeObserver from "resize-observer-polyfill";
 import { scaleLinear, axisBottom, axisLeft, line, curveMonotoneX, range, ScaleLinear } from "d3";
 import { calcWindParts } from "../../utils/utils";
 
 const margin: any = { left: 40, right: 10, top: 10, bottom: 20 };
-const minTemp: number = -25;
-const maxTemp: number = 30;
+const minTemp: number = -40;
+const maxTemp: number = 40;
 const maxAlt: number = 4000;
 const dryAdiabateFactor: number = 0.01;
 const dryAdiabateStep: number = 5;
-const textTempOffset: number = 14;
-const windArrowTempY: number = 27.5;
-const windArrowTextOffset: number = -28;
+const stationTextOffset: number = 50;
+const stationTextPadding: number = 3;
+const windArrowMinSize: number = 15;
+const windArrowTempX: number = 37.5;
+const windArrowTextOffsetTempX: number = 1.8;
 
 @Component({
   tag: "lszx-emagram-chart",
@@ -26,60 +27,66 @@ export class LszxEmagramChart {
   svg: Selection<Element, any, HTMLElement, any>;
   xScale: ScaleLinear<number, number>;
   yScale: ScaleLinear<number, number>;
-  ro: ResizeObserver;
+  w: number;
+  h: number;
 
   @Prop() data: any;
+  @Prop() width: number;
+  @Prop() showCaptions: boolean = true;
 
   componentDidLoad() {
-    this.ro = new ResizeObserver(entries => {
-      const bounds = entries[0].contentRect;
-      const w = bounds.width;
-      const h = 2*w/3;
-
-      this.svg = select(this.svgElementRef);
-      this.svgElementRef.setAttribute("width", `${w}`);
-      this.svgElementRef.setAttribute("height", `${h}`);
-
-      this.drawChartBase(w, h);
-      this.drawChartData();
-    });
-    this.ro.observe(this.element);
-  }
-
-  componentDidUpdate() {
+    this.svg = select(this.svgElementRef);
+    this.setBounds();
+    this.drawChartBase();
     this.drawChartData();
   }
 
-  drawChartBase(w, h) {
-    this.svg.selectAll("*").remove();
+  componentDidUpdate() {
+    if(this.width != this.w) {
+      this.setBounds();
+      this.drawChartBase();
+    }
+    this.drawChartData();
+  }
+
+  setBounds() {
+    this.w = this.width;
+    this.h = 2*this.w/3;
+    this.svgElementRef.setAttribute("width", `${this.w}`);
+    this.svgElementRef.setAttribute("height", `${this.h}`);
+  }
+
+  drawChartBase() {
+    this.svg.selectAll(".base").remove();
+    this.svg.selectAll(".data").remove();
 
     this.xScale = scaleLinear()
       .domain([ minTemp, maxTemp ])
-      .rangeRound([margin.left, w - margin.right]);
+      .rangeRound([margin.left, this.w - margin.right]);
 
     this.yScale = scaleLinear()
       .domain([ maxAlt, 0 ])
-      .rangeRound([margin.top, h - margin.bottom]);
+      .rangeRound([margin.top, this.h - margin.bottom]);
 
-    this.drawGrid(w, h);
+    this.drawGrid();
     this.drawDryAdiabates();
   }
 
-  drawGrid(w, h) {
-    const grid = this.svg.append("g").attr("class", "grid");
+  drawGrid() {
+    const grid = this.svg.append("g").attr("class", "base grid");
 
     grid.append("g") // x legend
-      .attr("transform", `translate(0, ${h - margin.bottom})`)
-      .call(axisBottom(this.xScale).ticks(10).tickSize(-h + margin.top + margin.bottom));
+      .attr("transform", `translate(0, ${this.h - margin.bottom})`)
+      .call(axisBottom(this.xScale).ticks(10).tickSize(-this.h + margin.top + margin.bottom));
 
     grid.append("g")
       .attr("transform", `translate(${margin.left}, 0)`)
-      .call(axisLeft(this.yScale).ticks(8).tickSize(-w + margin.right + margin.left));
+      .call(axisLeft(this.yScale).ticks(8).tickSize(-this.w + margin.right + margin.left));
   }
 
   drawDryAdiabates() {
     const dryAdiabateGrid = this.svg.append("g")
-      .attr("class", "dryAdiabateGrid");
+      .attr("class", "base dryAdiabateGrid");
 
     const xyLine = line()
       .x(d => this.xScale(d[0]))
@@ -109,23 +116,32 @@ export class LszxEmagramChart {
   }
 
   drawChartData() {
+    if(!this.data) return;
     this.svg.selectAll(".data").remove();
-    this.drawStationNames();
     this.drawTemperature();
     this.drawDewpoint();
     this.drawWindArrows();
-    this.drawWindData();
+    if(this.showCaptions) {
+      this.drawWindData();
+      this.drawStationNames();
+    }
   }
 
   drawStationNames() {
     const stationNames = this.svg.append("g")
       .attr("class", "data stationtexts");
 
-      this.data.forEach(s => {
-      stationNames.append("text")
-        .attr("x", this.xScale(s.temperature) + textTempOffset)
+    this.data.forEach(s => {
+      let text = stationNames.append("text")
+        .attr("x", stationTextOffset)
         .attr("y", this.yScale(s.alt) + 5)
         .text(`${s.stationName} (${s.alt}m)`);
+      let textBBox = text.node().getBBox();
+      stationNames.insert("rect", "text")
+        .attr("class", "textbg")
+        .attr("x", textBBox.x - stationTextPadding).attr("y", textBBox.y - stationTextPadding)
+        .attr("width", textBBox.width + (2 * stationTextPadding)).attr("height", textBBox.height + (2 * stationTextPadding))
+        .attr("filter", "url(#blur1)");
     });
   }
 
@@ -178,7 +194,7 @@ export class LszxEmagramChart {
     this.data.forEach(s => {
 
       let windParts = calcWindParts(s.windSpeed);
-      let x = this.xScale(windArrowTempY);
+      let x = this.xScale(windArrowTempX);
       let y = this.yScale(s.alt);
 
       let windArrow = windArrows.append("g")
@@ -195,7 +211,7 @@ export class LszxEmagramChart {
           .attr("r", 6);
       }
       else {
-        let windArrowSize = this.xScale(2) - this.xScale(0); // width: around 2°C ;)
+        let windArrowSize = Math.max(this.xScale(2) - this.xScale(0), windArrowMinSize); // width: around 2°C ;)
         let windArrowX = -windArrowSize/2;
 
         // base line
@@ -230,18 +246,18 @@ export class LszxEmagramChart {
   }
 
   drawWindData() {
-    const stationNames = this.svg.append("g")
+    const windData = this.svg.append("g")
     .attr("class", "data winddata");
 
     this.data.forEach(s => {
-      stationNames.append("text")
-        .attr("x", this.xScale(windArrowTempY) + windArrowTextOffset)
-        .attr("y", this.yScale(s.alt) - 4)
-        .html(s.windDirection);
-      stationNames.append("text")
-        .attr("x", this.xScale(windArrowTempY) + windArrowTextOffset)
-        .attr("y", this.yScale(s.alt) + 8)
-        .html(`${s.windSpeed} / ${s.windGusts}`);
+      windData.append("text")
+        .attr("x", this.xScale(windArrowTempX - windArrowTextOffsetTempX))
+        .attr("y", this.yScale(s.alt) + 4)
+        .html(`${s.windDirection} / ${s.windSpeed} / ${s.windGusts}°`);
+      // windData.append("text")
+      //   .attr("x", this.xScale(windArrowTempY) + windArrowTextOffset)
+      //   .attr("y", this.yScale(s.alt) + 8)
+      //   .html(``);
       });
   }
 
@@ -256,6 +272,11 @@ export class LszxEmagramChart {
     return (
       <svg className="container" width="100%" height="1" aria-label={descriptionText}
            ref={(ref: SVGSVGElement) => this.svgElementRef = ref}>
+        <defs>
+          <filter id="blur1" x="0" y="0">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
+          </filter>
+        </defs>
       </svg>
     );
   }

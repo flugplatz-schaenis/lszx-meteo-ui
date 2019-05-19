@@ -14,17 +14,30 @@ export namespace Components {
 
   interface LszxEmagramChart {
     'data': any;
+    'showCaptions': boolean;
+    'width': number;
   }
   interface LszxEmagramChartAttributes extends StencilHTMLAttributes {
+    'data'?: any;
+    'showCaptions'?: boolean;
+    'width'?: number;
+  }
+
+  interface LszxEmagramDataTable {
+    'data': any;
+  }
+  interface LszxEmagramDataTableAttributes extends StencilHTMLAttributes {
     'data'?: any;
   }
 
   interface LszxEmagramTimeSelector {
     'snapshots': any[];
+    'width': number;
   }
   interface LszxEmagramTimeSelectorAttributes extends StencilHTMLAttributes {
     'onSnapshotSelected'?: (event: CustomEvent) => void;
     'snapshots'?: any[];
+    'width'?: number;
   }
 
   interface LszxEmagram {
@@ -38,12 +51,14 @@ export namespace Components {
 declare global {
   interface StencilElementInterfaces {
     'LszxEmagramChart': Components.LszxEmagramChart;
+    'LszxEmagramDataTable': Components.LszxEmagramDataTable;
     'LszxEmagramTimeSelector': Components.LszxEmagramTimeSelector;
     'LszxEmagram': Components.LszxEmagram;
   }
 
   interface StencilIntrinsicElements {
     'lszx-emagram-chart': Components.LszxEmagramChartAttributes;
+    'lszx-emagram-data-table': Components.LszxEmagramDataTableAttributes;
     'lszx-emagram-time-selector': Components.LszxEmagramTimeSelectorAttributes;
     'lszx-emagram': Components.LszxEmagramAttributes;
   }
@@ -53,6 +68,12 @@ declare global {
   var HTMLLszxEmagramChartElement: {
     prototype: HTMLLszxEmagramChartElement;
     new (): HTMLLszxEmagramChartElement;
+  };
+
+  interface HTMLLszxEmagramDataTableElement extends Components.LszxEmagramDataTable, HTMLStencilElement {}
+  var HTMLLszxEmagramDataTableElement: {
+    prototype: HTMLLszxEmagramDataTableElement;
+    new (): HTMLLszxEmagramDataTableElement;
   };
 
   interface HTMLLszxEmagramTimeSelectorElement extends Components.LszxEmagramTimeSelector, HTMLStencilElement {}
@@ -69,12 +90,14 @@ declare global {
 
   interface HTMLElementTagNameMap {
     'lszx-emagram-chart': HTMLLszxEmagramChartElement
+    'lszx-emagram-data-table': HTMLLszxEmagramDataTableElement
     'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement
     'lszx-emagram': HTMLLszxEmagramElement
   }
 
   interface ElementTagNameMap {
     'lszx-emagram-chart': HTMLLszxEmagramChartElement;
+    'lszx-emagram-data-table': HTMLLszxEmagramDataTableElement;
     'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement;
     'lszx-emagram': HTMLLszxEmagramElement;
   }

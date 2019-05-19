@@ -1,5 +1,4 @@
 lszx-emagram-chart {
-  display: block;
   color: white;
 }
 
@@ -63,6 +62,11 @@ lszx-emagram-chart {
 
 .stationtexts text {
   fill: lightcyan;
+}
+
+.stationtexts .textbg {
+  fill: #043a53;
+  fill-opacity: 1;
 }
 
 .winddata text {

@@ -25,27 +25,29 @@ export class LszxEmagramTimeSelector {
   to: Date;
 
   @Prop() snapshots: any[];
+  @Prop() width: number;
   @State() selectedSnapshot: any;
   @Event() snapshotSelected: EventEmitter;
 
   componentDidLoad() {
-    this.ro = new ResizeObserver(entries => {
-      const bounds = entries[0].contentRect;
-      this.w = bounds.width;
-
-      this.svg = select(this.svgElementRef);
-      this.svgElementRef.setAttribute("width", `${this.w}`);
-      this.svgElementRef.setAttribute("height", `${height}`);
-
-      this.drawTimeSelector();
-    });
+    this.svg = select(this.svgElementRef);
     this.checkSetDefaultSelectedSnapshot();
-    this.ro.observe(this.element);
+    this.setBounds();
+    this.drawTimeSelector();
   }
 
   componentDidUpdate() {
+    if(this.w != this.width)
+      this.setBounds();
     this.drawTimeSelector();
   }
+
+  setBounds() {
+    this.w = this.width;
+    this.svgElementRef.setAttribute("width", `${this.w}`);
+    this.svgElementRef.setAttribute("height", `${height}`);
+  }
+
 
   checkSetDefaultSelectedSnapshot() {
     if(this.selectedSnapshot)

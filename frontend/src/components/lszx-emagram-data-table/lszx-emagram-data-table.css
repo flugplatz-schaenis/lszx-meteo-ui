@@ -1,0 +1,22 @@
+lszx-emagram-data-table {
+  color: white;
+  font-size: 13px;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  font-style: italic;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+th.numeric, td.numeric {
+  text-align: right;
+}
+
+td, th {
+  padding-right: 5px;
+}

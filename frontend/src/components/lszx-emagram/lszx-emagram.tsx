@@ -1,4 +1,7 @@
-import { Component, Prop, State } from "@stencil/core";
+import { Component, Prop, State, Element } from "@stencil/core";
+import ResizeObserver from "resize-observer-polyfill";
+
+const mobileModeWidthThreshold: number = 600;
 
 @Component({
   tag: "lszx-emagram",
@@ -9,12 +12,16 @@ export class LszxEmagram {
 
   @Prop() datasrc: string;
 
-  stations: any[];
+  @Element() el: HTMLElement;
+  @State() w: number = 500;
   @State() regions: any;
   @State() snapshots: any[];
   @State() selectedRegion: string;
   @State() selectedSnapshot: any;
   @State() chartData: any;
+
+  stations: any[];
+  ro: ResizeObserver;
 
   componentWillLoad() {
     fetch(this.datasrc)
@@ -28,6 +35,14 @@ export class LszxEmagram {
           this.snapshotSelected(this.snapshots[this.snapshots.length-1].url);
         }
       });
+  }
+
+  componentDidLoad() {
+    this.ro = new ResizeObserver(entries => {
+      const bounds = entries[0].contentRect;
+      this.w = bounds.width;
+    });
+    this.ro.observe(this.el);
   }
 
   regionSelected(region: string) {
@@ -65,14 +80,18 @@ export class LszxEmagram {
     if(!this.snapshots || !this.regions || !this.chartData)
       return (<div>Loading...</div>);
 
+    const xsScreen = this.w <= mobileModeWidthThreshold;
+    console.log("mobile mode", this.w, xsScreen);
+
     return (
         <div>
           <select onChange={e => this.regionSelected((e.target as HTMLSelectElement).value)}>
             {Object.keys(this.regions).map(k =>
               (<option value={k}>{this.regions[k].title}</option>))}
           </select>
-          <lszx-emagram-time-selector snapshots={this.snapshots} onSnapshotSelected={s => this.snapshotSelected(s.detail)}></lszx-emagram-time-selector>
-          <lszx-emagram-chart data={this.chartData}></lszx-emagram-chart>
+          <lszx-emagram-time-selector width={this.w} snapshots={this.snapshots} onSnapshotSelected={s => this.snapshotSelected(s.detail)}></lszx-emagram-time-selector>
+          <lszx-emagram-chart data={this.chartData} width={this.w} showCaptions={!xsScreen}></lszx-emagram-chart>
+          {(xsScreen && (<lszx-emagram-data-table data={this.chartData}></lszx-emagram-data-table>))}
         </div>
     );
   }
