@@ -1,7 +1,7 @@
 import { Component, Element, Prop } from "@stencil/core";
 import { Selection, select } from "d3-selection";
 import { scaleLinear, axisBottom, axisLeft, line, curveMonotoneX, range, ScaleLinear } from "d3";
-import { calcWindParts } from "../../utils/utils";
+import { calcWindParts, calcGradient } from "../../utils/utils";
 
 const margin: any = { left: 40, right: 10, top: 10, bottom: 20 };
 const minTemp: number = -40;
@@ -14,6 +14,7 @@ const stationTextPadding: number = 3;
 const windArrowMinSize: number = 15;
 const windArrowTempX: number = 37.5;
 const windArrowTextOffsetTempX: number = 1.8;
+const gradientLineOffsetTempX: number = 1;
 
 @Component({
   tag: "lszx-emagram-chart",
@@ -124,6 +125,7 @@ export class LszxEmagramChart {
     if(this.showCaptions) {
       this.drawWindData();
       this.drawStationNames();
+      this.drawGradientValues();
     }
   }
 
@@ -253,12 +255,26 @@ export class LszxEmagramChart {
       windData.append("text")
         .attr("x", this.xScale(windArrowTempX - windArrowTextOffsetTempX))
         .attr("y", this.yScale(s.alt) + 4)
-        .html(`${s.windDirection} / ${s.windSpeed} / ${s.windGusts}°`);
-      // windData.append("text")
-      //   .attr("x", this.xScale(windArrowTempY) + windArrowTextOffset)
-      //   .attr("y", this.yScale(s.alt) + 8)
-      //   .html(``);
+        .html(`${s.windDirection}° / ${s.windSpeed} / ${s.windGusts}`);
       });
+  }
+
+  drawGradientValues() {
+    const gradientValues = this.svg.append("g")
+      .attr("class", "data gradientValues");
+
+    let dataOrdered = this.data.sort((a, b) => a.alt < b.alt ? -1 : b.alt > a.alt ? 1 : 0);
+
+    for(let i=0; i<dataOrdered.length-1; i++) {
+      let lower = dataOrdered[i],
+          upper = dataOrdered[i+1];
+      let gradient = calcGradient(upper, lower);
+
+      gradientValues.append("text")
+        .attr("x", this.xScale(lower.temperature + ((upper.temperature - lower.temperature) / 2) + gradientLineOffsetTempX))
+        .attr("y", this.yScale(lower.alt + ((upper.alt - lower.alt) / 2)))
+        .html(`${gradient}°C / 100m`);
+    }
   }
 
   render() {

@@ -18,3 +18,7 @@ export function calcWindParts(windInKph: number): any {
     symbols: (triangles + largeDashes + smallDashes)
   };
 }
+
+export function calcGradient(upper: any, lower: any) {
+  return Math.round(100 * 100 * (lower.temperature - upper.temperature) / (upper.alt - lower.alt)) / 100;;
+}

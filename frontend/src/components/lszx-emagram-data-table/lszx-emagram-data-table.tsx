@@ -25,7 +25,7 @@ export class LszxEmagramDataTable {
             <th class="numeric">H&ouml;he</th>
             <th class="numeric">Temp.</th>
             <th class="numeric">TP</th>
-            <th>Wind (km/h)</th>
+            <th>Wind (° / km/h)</th>
           </tr>
         </thead>
         <tbody>
