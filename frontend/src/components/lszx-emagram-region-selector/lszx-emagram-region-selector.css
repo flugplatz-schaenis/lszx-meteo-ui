@@ -1,0 +1,30 @@
+ul.regions {
+  font-size: 13px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-left: 0;
+}
+
+ul.regions li {
+  list-style: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+ul.regions li a {
+  color: white;
+  display: block;
+  width: 100%;
+  padding-left: 4px;
+  text-decoration: none;
+}
+
+ul.regions li a:before {
+  content: "\25EF";
+  margin-left: -4px;
+  padding-right: 4px;
+}
+
+ul.regions li.selected a:before {
+  content: "\25C9";
+}

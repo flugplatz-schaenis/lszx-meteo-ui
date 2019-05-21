@@ -20,5 +20,9 @@ export function calcWindParts(windInKph: number): any {
 }
 
 export function calcGradient(upper: any, lower: any) {
-  return Math.round(100 * 100 * (lower.temperature - upper.temperature) / (upper.alt - lower.alt)) / 100;;
+  return calcGradientByValues(upper.temperature, lower.temperature, upper.alt, lower.alt);
+}
+
+export function calcGradientByValues(upperTemp: number, lowerTemp: number, upperAlt: number, lowerAlt: number) {
+  return Math.round(100 * 100 * (lowerTemp - upperTemp) / (upperAlt - lowerAlt)) / 100;;
 }

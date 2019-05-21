@@ -1,12 +1,12 @@
 {
   "regions": {
-    "all": {
-      "title": "Ganze Schweiz",
+    "alps": {
+      "title": "Ostschweiz / Alpen",
       "stations": [ "KLO", "LAE", "HOE", "NAP", "PIL", "SAE", "WFJ", "COV", "JUN" ]
     },
     "test": {
-      "title": "Test",
-      "stations": [ "KLO", "LAE" ]
+      "title": "Jura",
+      "stations": [ "CRM", "CHM", "CHA", "DOL" ]
     }
   },
   "stations": {
@@ -63,6 +63,30 @@
       "lat": 46.547447,
       "lon": 7.985331,
       "alt": 3580
+    },
+    "CRM": {
+      "name": "Cressier",
+      "lat": 47.047575,
+      "lon": 7.059147,
+      "alt": 433
+    },
+    "CHM": {
+      "name": "Chaumont",
+      "lat": 47.049164,
+      "lon": 76.978828,
+      "alt": 1138
+    },
+    "CHA": {
+      "name": "Chasseral",
+      "lat": 47.131753,
+      "lon": 7.054367,
+      "alt": 1596
+    },
+    "DOL": {
+      "name": "La Dôle",
+      "lat": 46.424789,
+      "lon": 6.099461,
+      "alt": 1671
     }
   }
 }

@@ -50,7 +50,6 @@ export class LszxEmagramTimeSelector {
     this.svgElementRef.setAttribute("height", `${height}`);
   }
 
-
   checkSetDefaultSelectedSnapshot() {
     if(this.selectedSnapshot)
       return;

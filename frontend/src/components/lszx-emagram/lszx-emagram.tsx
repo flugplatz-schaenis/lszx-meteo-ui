@@ -1,5 +1,6 @@
 import { Component, Prop, State, Element } from "@stencil/core";
 import ResizeObserver from "resize-observer-polyfill";
+import { calcGradientByValues } from "../../utils/utils";
 
 const mobileModeWidthThreshold: number = 600;
 
@@ -19,6 +20,7 @@ export class LszxEmagram {
   @State() selectedRegion: string;
   @State() selectedSnapshot: any;
   @State() chartData: any;
+  @State() regionSelectorData: any[];
 
   stations: any[];
   ro: ResizeObserver;
@@ -31,8 +33,8 @@ export class LszxEmagram {
         this.regions = response.regions;
         this.snapshots = response.snapshots;
         if(this.regions && this.snapshots) {
-          this.regionSelected(Object.keys(this.regions)[0]);
           this.snapshotSelected(this.snapshots[this.snapshots.length-1].url);
+          this.regionSelected(Object.keys(this.regions)[0]);
         }
       });
   }
@@ -47,21 +49,22 @@ export class LszxEmagram {
 
   regionSelected(region: string) {
     this.selectedRegion = region;
-    this.getChartData();
+    this.getSnapshotData();
   }
 
   snapshotSelected(snapshot: any) {
     this.selectedSnapshot = snapshot;
-    this.getChartData();
+    this.getSnapshotData();
   }
 
-  getChartData() {
+  getSnapshotData() {
     if(!this.selectedRegion || !this.selectedSnapshot)
       return;
 
     fetch(this.selectedSnapshot)
       .then((response: Response) => response.json())
       .then(response => {
+
         this.chartData = this.regions[this.selectedRegion].stations.map(station => ({
           station: station,
           stationName: this.stations[station].name,
@@ -73,6 +76,38 @@ export class LszxEmagram {
           windGusts: response[station].windGusts,
           qnh: response[station].qnh
         }));
+
+        this.regionSelectorData = Object.keys(this.regions).map(key => {
+          let region = this.regions[key];
+          let minAlt = 9999, maxAlt = 0,
+              minAltTemp = 0, maxAltTemp = 0;
+
+          for(let stationKey of region.stations) {
+            let station = this.stations[stationKey];
+            let stationSnapshot = response[stationKey];
+            if(!stationSnapshot)
+              continue;
+            if(station.alt < minAlt) {
+              minAlt = station.alt;
+              minAltTemp = stationSnapshot.temperature;
+            }
+            if(station.alt > maxAlt) {
+              maxAlt = station.alt;
+              maxAltTemp = stationSnapshot.temperature;
+            }
+          }
+
+          let gradient = calcGradientByValues(maxAltTemp, minAltTemp, maxAlt, minAlt);
+
+          return {
+            key,
+            title: region.title,
+            minAlt,
+            maxAlt,
+            gradient
+          };
+        });
+
       });
   }
 
@@ -81,14 +116,14 @@ export class LszxEmagram {
       return (<div>Loading...</div>);
 
     const xsScreen = this.w <= mobileModeWidthThreshold;
-    console.log("mobile mode", this.w, xsScreen);
 
     return (
         <div>
-          <lszx-emagram-region-selector regions={this.regions} onRegionSelected={r => this.regionSelected(r.detail)}></lszx-emagram-region-selector>
           <lszx-emagram-time-selector width={this.w} snapshots={this.snapshots} onSnapshotSelected={s => this.snapshotSelected(s.detail)}></lszx-emagram-time-selector>
+          <lszx-emagram-region-selector regions={this.regionSelectorData} twoLines={xsScreen} onRegionSelected={r => this.regionSelected(r.detail)}></lszx-emagram-region-selector>
           <lszx-emagram-chart data={this.chartData} width={this.w} showCaptions={!xsScreen}></lszx-emagram-chart>
           {(xsScreen && (<lszx-emagram-data-table data={this.chartData}></lszx-emagram-data-table>))}
+          <a href="https://www.meteoschweiz.admin.ch" target="_blank" class="copyright">Quelle: Bundesamt für Meteorologie und Klimatologie MeteoSchweiz</a>
         </div>
     );
   }

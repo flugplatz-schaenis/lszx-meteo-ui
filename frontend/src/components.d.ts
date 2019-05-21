@@ -32,10 +32,12 @@ export namespace Components {
 
   interface LszxEmagramRegionSelector {
     'regions': any[];
+    'twoLines': boolean;
   }
   interface LszxEmagramRegionSelectorAttributes extends StencilHTMLAttributes {
     'onRegionSelected'?: (event: CustomEvent) => void;
     'regions'?: any[];
+    'twoLines'?: boolean;
   }
 
   interface LszxEmagramTimeSelector {
