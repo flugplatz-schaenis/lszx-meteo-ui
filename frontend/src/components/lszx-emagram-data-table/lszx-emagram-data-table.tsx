@@ -1,4 +1,5 @@
 import { Component, Prop } from "@stencil/core";
+import { calcGradient } from "../../utils/utils";
 
 @Component({
   tag: "lszx-emagram-data-table",
@@ -16,26 +17,51 @@ export class LszxEmagramDataTable {
   }
 
   render() {
-    let dataOrdered = this.data.sort((a, b) => a.alt < b.alt ? -1 : b.alt > a.alt ? 1 : 0);
+    // TODO: FIX ORDER
+    let dataOrdered = this.data.sort((a, b) => (a.alt < b.alt) ? 1 : (a.alt > b.alt ? -1 : 0));
+    for(let i=0; i<dataOrdered.length-1; i++) {
+      let upper = dataOrdered[i],
+          lower = dataOrdered[i+1];
+      let gradient = calcGradient(upper, lower);
+      upper.gradient = gradient;
+    }
     return (
       <table>
         <thead>
           <tr>
             <th>Station</th>
-            <th class="numeric">H&ouml;he</th>
-            <th class="numeric">Temp.</th>
-            <th class="numeric">TP</th>
-            <th>Wind (° / km/h)</th>
+            <th class="numeric">
+              Temp.<br/>
+              TP
+            </th>
+            <th class="numeric">
+              Wind<br />
+              (km/h)
+            </th>
+            <th class="numeric">
+              Grad.<br />
+              (100m)
+            </th>
           </tr>
         </thead>
         <tbody>
           {dataOrdered.map(d => (
             <tr>
-              <td>{d.stationName}</td>
-              <td class="numeric">{d.alt}m</td>
-              <td class="numeric">{d.temperature}</td>
-              <td class="numeric">{d.dewpoint}</td>
-              <td>{d.windDirection}° / {d.windSpeed} / {d.windGusts}</td>
+              <td>
+                {d.stationName}<br />
+                {d.alt}m
+              </td>
+              <td class="numeric">
+                {d.temperature}°C<br />
+                {d.dewpoint}°C
+              </td>
+              <td class="numeric">
+                {d.windDirection}°<br />
+                {d.windSpeed} / {d.windGusts}
+              </td>
+              <td class="numeric noborder">
+                <span class="gradient">{d.gradient ? `${d.gradient}°C` : ""}</span>
+              </td>
             </tr>
           ))}
         </tbody>

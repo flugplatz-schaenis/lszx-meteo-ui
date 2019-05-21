@@ -5,6 +5,13 @@ lszx-emagram-data-table {
 
 table {
   border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  padding-right: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 th {
@@ -13,10 +20,21 @@ th {
   border-bottom: 1px solid rgba(255, 255, 255, 0.6);
 }
 
+td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 th.numeric, td.numeric {
   text-align: right;
 }
 
-td, th {
-  padding-right: 5px;
+td.noborder {
+  border-bottom: none;
+}
+
+span.gradient {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  top: 20px;
 }

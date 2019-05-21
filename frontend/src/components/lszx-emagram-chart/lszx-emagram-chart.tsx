@@ -263,7 +263,7 @@ export class LszxEmagramChart {
     const gradientValues = this.svg.append("g")
       .attr("class", "data gradientValues");
 
-    let dataOrdered = this.data.sort((a, b) => a.alt < b.alt ? -1 : b.alt > a.alt ? 1 : 0);
+    let dataOrdered = this.data.sort((a, b) => a.alt < b.alt ? -1 : a.alt > b.alt ? 1 : 0);
 
     for(let i=0; i<dataOrdered.length-1; i++) {
       let lower = dataOrdered[i],
