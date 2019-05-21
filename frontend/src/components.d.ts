@@ -30,6 +30,14 @@ export namespace Components {
     'data'?: any;
   }
 
+  interface LszxEmagramRegionSelector {
+    'regions': any[];
+  }
+  interface LszxEmagramRegionSelectorAttributes extends StencilHTMLAttributes {
+    'onRegionSelected'?: (event: CustomEvent) => void;
+    'regions'?: any[];
+  }
+
   interface LszxEmagramTimeSelector {
     'snapshots': any[];
     'width': number;
@@ -52,6 +60,7 @@ declare global {
   interface StencilElementInterfaces {
     'LszxEmagramChart': Components.LszxEmagramChart;
     'LszxEmagramDataTable': Components.LszxEmagramDataTable;
+    'LszxEmagramRegionSelector': Components.LszxEmagramRegionSelector;
     'LszxEmagramTimeSelector': Components.LszxEmagramTimeSelector;
     'LszxEmagram': Components.LszxEmagram;
   }
@@ -59,6 +68,7 @@ declare global {
   interface StencilIntrinsicElements {
     'lszx-emagram-chart': Components.LszxEmagramChartAttributes;
     'lszx-emagram-data-table': Components.LszxEmagramDataTableAttributes;
+    'lszx-emagram-region-selector': Components.LszxEmagramRegionSelectorAttributes;
     'lszx-emagram-time-selector': Components.LszxEmagramTimeSelectorAttributes;
     'lszx-emagram': Components.LszxEmagramAttributes;
   }
@@ -76,6 +86,12 @@ declare global {
     new (): HTMLLszxEmagramDataTableElement;
   };
 
+  interface HTMLLszxEmagramRegionSelectorElement extends Components.LszxEmagramRegionSelector, HTMLStencilElement {}
+  var HTMLLszxEmagramRegionSelectorElement: {
+    prototype: HTMLLszxEmagramRegionSelectorElement;
+    new (): HTMLLszxEmagramRegionSelectorElement;
+  };
+
   interface HTMLLszxEmagramTimeSelectorElement extends Components.LszxEmagramTimeSelector, HTMLStencilElement {}
   var HTMLLszxEmagramTimeSelectorElement: {
     prototype: HTMLLszxEmagramTimeSelectorElement;
@@ -91,6 +107,7 @@ declare global {
   interface HTMLElementTagNameMap {
     'lszx-emagram-chart': HTMLLszxEmagramChartElement
     'lszx-emagram-data-table': HTMLLszxEmagramDataTableElement
+    'lszx-emagram-region-selector': HTMLLszxEmagramRegionSelectorElement
     'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement
     'lszx-emagram': HTMLLszxEmagramElement
   }
@@ -98,6 +115,7 @@ declare global {
   interface ElementTagNameMap {
     'lszx-emagram-chart': HTMLLszxEmagramChartElement;
     'lszx-emagram-data-table': HTMLLszxEmagramDataTableElement;
+    'lszx-emagram-region-selector': HTMLLszxEmagramRegionSelectorElement;
     'lszx-emagram-time-selector': HTMLLszxEmagramTimeSelectorElement;
     'lszx-emagram': HTMLLszxEmagramElement;
   }

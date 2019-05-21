@@ -18,11 +18,13 @@ export class LszxEmagramTimeSelector {
   @Element() element: HTMLElement;
   svgElementRef: SVGSVGElement;
   svg: Selection<Element, any, HTMLElement, any>;
+  parent: Selection<Element, any, HTMLElement, any>;
   timeScale: ScaleTime<number, number>;
   ro: ResizeObserver;
   w: number;
   from: Date;
   to: Date;
+  shift: number;
 
   @Prop() snapshots: any[];
   @Prop() width: number;
@@ -90,14 +92,14 @@ export class LszxEmagramTimeSelector {
       .domain([ this.from, this.to ])
       .range([margin.left, totalWidth + margin.left]);
 
-    const parent = this.svg.append("g")
+    this.parent = this.svg.append("g")
       .attr("class", "parent");
 
-    this.drawTimeline(parent);
-    this.drawSnapshotMarkers(parent);
-    this.shiftToCurrentShapshot(parent);
+    this.drawTimeline();
+    this.drawSnapshotMarkers();
+    this.shiftToCurrentShapshot();
 
-    parent.append("rect")
+    this.parent.append("rect")
       .attr("class", "clickTgt")
       .attr("x", 0).attr("y", 0)
       .attr("width", totalWidth + margin.left + margin.right).attr("height", height)
@@ -105,7 +107,7 @@ export class LszxEmagramTimeSelector {
   }
 
   clickTargetHit() {
-    const clickTime = this.timeScale.invert(event.offsetX).getTime();
+    const clickTime = this.timeScale.invert(this.shift + event.offsetX).getTime();
 
     // get closest snapshot
     let closest = this.snapshots
@@ -116,8 +118,8 @@ export class LszxEmagramTimeSelector {
     this.snapshotSelected.emit(closest.url);
   }
 
-  drawTimeline(parent) {
-    const timeline = parent.append("g")
+  drawTimeline() {
+    const timeline = this.parent.append("g")
       .attr("class", "timeline");
 
     const axis = timeline.append("g")
@@ -135,8 +137,8 @@ export class LszxEmagramTimeSelector {
         .style("text-anchor", "start");
   }
 
-  drawSnapshotMarkers(parent) {
-    const snapshotMarker = parent.append("g")
+  drawSnapshotMarkers() {
+    const snapshotMarker = this.parent.append("g")
       .attr("class", "snapshotMarker");
 
     this.snapshots.forEach(s => {
@@ -151,12 +153,12 @@ export class LszxEmagramTimeSelector {
     });
   }
 
-  shiftToCurrentShapshot(parent) {
+  shiftToCurrentShapshot() {
     const curX = this.timeScale(new Date(this.selectedSnapshot.dt));
     const seriesWidth = this.timeScale(this.to);
-    let shift = curX - seriesWidth / 2;
-    shift = Math.max(0, Math.min(shift, seriesWidth - this.w + margin.left));
-    parent.attr("transform", `translate(${-shift}, 0)`);
+    this.shift = curX - this.w / 2;
+    this.shift = Math.max(0, Math.min(this.shift, seriesWidth - this.w + margin.left));
+    this.parent.attr("transform", `translate(${-this.shift}, 0)`);
   }
 
   render() {
@@ -169,9 +171,5 @@ export class LszxEmagramTimeSelector {
            ref={(ref: SVGSVGElement) => this.svgElementRef = ref}>
         </svg>
     );
-    /* <select onChange={e => this.fireSnapshotSelected((e.target as HTMLSelectElement).value)}>
-      {this.snapshots.map(s =>
-        (<option value={s.url}>{format(s.dt, "D.M. HH:mm")}</option>))}
-    </select> */
   }
 }

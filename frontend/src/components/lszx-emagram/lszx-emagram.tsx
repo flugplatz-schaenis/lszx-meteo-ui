@@ -85,10 +85,7 @@ export class LszxEmagram {
 
     return (
         <div>
-          <select onChange={e => this.regionSelected((e.target as HTMLSelectElement).value)}>
-            {Object.keys(this.regions).map(k =>
-              (<option value={k}>{this.regions[k].title}</option>))}
-          </select>
+          <lszx-emagram-region-selector regions={this.regions} onRegionSelected={r => this.regionSelected(r.detail)}></lszx-emagram-region-selector>
           <lszx-emagram-time-selector width={this.w} snapshots={this.snapshots} onSnapshotSelected={s => this.snapshotSelected(s.detail)}></lszx-emagram-time-selector>
           <lszx-emagram-chart data={this.chartData} width={this.w} showCaptions={!xsScreen}></lszx-emagram-chart>
           {(xsScreen && (<lszx-emagram-data-table data={this.chartData}></lszx-emagram-data-table>))}
