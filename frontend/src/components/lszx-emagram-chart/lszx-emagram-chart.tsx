@@ -4,6 +4,7 @@ import { scaleLinear, axisBottom, axisLeft, line, curveMonotoneX, range, ScaleLi
 import { calcWindParts, calcGradient } from "../../utils/utils";
 
 const margin: any = { left: 40, right: 10, top: 10, bottom: 20 };
+const heightFactor: number = 4/5;
 const minTemp: number = -40;
 const maxTemp: number = 40;
 const maxAlt: number = 4000;
@@ -14,7 +15,8 @@ const stationTextPadding: number = 3;
 const windArrowMinSize: number = 15;
 const windArrowTempX: number = 37.5;
 const windArrowTextOffsetTempX: number = 1.8;
-const gradientLineOffsetTempX: number = 1;
+const gradientLineOffsetTempX: number = 2;
+const tempDewpointXOffsetTempX: number = 1;
 
 @Component({
   tag: "lszx-emagram-chart",
@@ -52,7 +54,7 @@ export class LszxEmagramChart {
 
   setBounds() {
     this.w = this.width;
-    this.h = 2*this.w/3;
+    this.h = heightFactor*this.w;
     this.svgElementRef.setAttribute("width", `${this.w}`);
     this.svgElementRef.setAttribute("height", `${this.h}`);
   }
@@ -124,6 +126,8 @@ export class LszxEmagramChart {
     this.drawWindArrows();
     if(this.showCaptions) {
       this.drawWindData();
+      this.drawTemperatureData();
+      this.drawDewpointData();
       this.drawStationNames();
       this.drawGradientValues();
     }
@@ -148,12 +152,12 @@ export class LszxEmagramChart {
   }
 
   drawTemperature() {
-    const stations = this.svg.append("g")
+    const temp = this.svg.append("g")
       .attr("class", "data temperature");
 
     // temperature points
     this.data.forEach(s => {
-      stations.append("circle")
+      temp.append("circle")
         .attr("cx", this.xScale(s.temperature))
         .attr("cy", this.yScale(s.alt))
         .attr("r", 3);
@@ -163,18 +167,31 @@ export class LszxEmagramChart {
     const xyLine = line()
       .x(d => this.xScale(d[0]))
       .y(d => this.yScale(d[1]));
-    stations.append("path")
+      temp.append("path")
       .datum(this.data.map(d => [ d.temperature, d.alt ]))
       .attr("d", xyLine);
   }
 
+  drawTemperatureData() {
+    const temp = this.svg.append("g")
+      .attr("class", "data temperaturedata");
+
+    // temperature values
+    this.data.forEach(s => {
+      temp.append("text")
+      .attr("x", this.xScale(s.temperature + tempDewpointXOffsetTempX))
+      .attr("y", this.yScale(s.alt) + 4)
+      .html(`${s.temperature}°C`);
+    });
+  }
+
   drawDewpoint() {
-    const stations = this.svg.append("g")
+    const dewpoint = this.svg.append("g")
       .attr("class", "data dewpoint");
 
     // dewpoint points
     this.data.forEach(s => {
-      stations.append("circle")
+      dewpoint.append("circle")
         .attr("cx", this.xScale(s.dewpoint))
         .attr("cy", this.yScale(s.alt))
         .attr("r", 3);
@@ -184,9 +201,22 @@ export class LszxEmagramChart {
     const xyLine = line()
       .x(d => this.xScale(d[0]))
       .y(d => this.yScale(d[1]));
-    stations.append("path")
+      dewpoint.append("path")
       .datum(this.data.map(d => [ d.dewpoint, d.alt ]))
       .attr("d", xyLine);
+  }
+
+  drawDewpointData() {
+    const temp = this.svg.append("g")
+      .attr("class", "data dewpointdata");
+
+    // dewpoint values
+    this.data.forEach(s => {
+      temp.append("text")
+      .attr("x", this.xScale(s.dewpoint - tempDewpointXOffsetTempX))
+      .attr("y", this.yScale(s.alt) + 4)
+      .html(`${s.dewpoint}°C`);
+    });
   }
 
   drawWindArrows() {
@@ -272,7 +302,7 @@ export class LszxEmagramChart {
 
       gradientValues.append("text")
         .attr("x", this.xScale(lower.temperature + ((upper.temperature - lower.temperature) / 2) + gradientLineOffsetTempX))
-        .attr("y", this.yScale(lower.alt + ((upper.alt - lower.alt) / 2)))
+        .attr("y", this.yScale(lower.alt + ((upper.alt - lower.alt) / 2)) + 5)
         .html(`${gradient}°C / 100m`);
     }
   }

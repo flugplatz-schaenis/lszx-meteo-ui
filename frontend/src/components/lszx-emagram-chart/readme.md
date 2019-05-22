@@ -7,9 +7,11 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type  | Default     |
-| -------- | --------- | ----------- | ----- | ----------- |
-| `data`   | `data`    |             | `any` | `undefined` |
+| Property       | Attribute       | Description | Type      | Default     |
+| -------------- | --------------- | ----------- | --------- | ----------- |
+| `data`         | `data`          |             | `any`     | `undefined` |
+| `showCaptions` | `show-captions` |             | `boolean` | `true`      |
+| `width`        | `width`         |             | `number`  | `undefined` |
 
 
 ----------------------------------------------

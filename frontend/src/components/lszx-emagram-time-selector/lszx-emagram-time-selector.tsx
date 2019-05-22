@@ -1,8 +1,7 @@
 import { Component, Prop, Event, Element, EventEmitter, State } from "@stencil/core";
 import { Selection, select } from "d3-selection";
 import ResizeObserver from "resize-observer-polyfill";
-import { scaleTime, ScaleTime, axisTop, range, event } from "d3";
-import { format } from "date-fns";
+import { scaleTime, ScaleTime, axisTop, range, event, timeFormat } from "d3";
 
 const margin: any = { left: 10, right: 10, top: 5, bottom: 5 };
 const minHourWidth: number = 35;
@@ -126,7 +125,7 @@ export class LszxEmagramTimeSelector {
       .attr("transform", "translate(0, 45)")
       .call(axisTop(this.timeScale)
         .tickValues(range(this.from.getTime(), this.to.getTime() + 1, 1800000))
-        .tickFormat((d: number) => format(d, 'HH:mm')));
+        .tickFormat((d: number) => timeFormat("%H:%M")(new Date(d))));
 
     axis.selectAll("text")
         .attr("y", -6)

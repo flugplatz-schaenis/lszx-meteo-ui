@@ -30,6 +30,11 @@ lszx-emagram-chart {
   stroke-opacity: 1;
 }
 
+.temperaturedata text {
+  font-size: 12px;
+  fill: lightcoral;
+}
+
 .dewpoint circle {
   fill: lightblue;
   fill-opacity: 1;
@@ -40,6 +45,12 @@ lszx-emagram-chart {
   stroke: lightblue;
   stroke-width: 3;
   stroke-opacity: 1;
+}
+
+.dewpointdata text {
+  font-size: 12px;
+  text-anchor: end;
+  fill: lightblue;
 }
 
 .wind .arrow line  {

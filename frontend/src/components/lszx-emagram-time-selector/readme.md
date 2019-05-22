@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property    | Attribute | Description | Type    | Default     |
-| ----------- | --------- | ----------- | ------- | ----------- |
-| `snapshots` | --        |             | `any[]` | `undefined` |
+| Property    | Attribute | Description | Type     | Default     |
+| ----------- | --------- | ----------- | -------- | ----------- |
+| `snapshots` | --        |             | `any[]`  | `undefined` |
+| `width`     | `width`   |             | `number` | `undefined` |
 
 
 ## Events

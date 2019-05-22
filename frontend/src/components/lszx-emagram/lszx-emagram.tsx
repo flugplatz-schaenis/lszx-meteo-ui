@@ -65,17 +65,23 @@ export class LszxEmagram {
       .then((response: Response) => response.json())
       .then(response => {
 
-        this.chartData = this.regions[this.selectedRegion].stations.map(station => ({
-          station: station,
-          stationName: this.stations[station].name,
-          alt: this.stations[station].alt,
-          temperature: response[station].temperature,
-          dewpoint: response[station].dewpoint,
-          windDirection: response[station].windDirection,
-          windSpeed: response[station].windSpeed,
-          windGusts: response[station].windGusts,
-          qnh: response[station].qnh
-        }));
+        this.chartData = this.regions[this.selectedRegion].stations.map(station => {
+          let stationMeta = this.stations[station] || { name: "", alt: 0 };
+          let stationData = response[station];
+          if(!stationData)
+            return null;
+          return {
+            station: station,
+            stationName: stationMeta.name,
+            alt: stationMeta.alt,
+            temperature: stationData.temperature,
+            dewpoint: stationData.dewpoint,
+            windDirection: stationData.windDirection,
+            windSpeed: stationData.windSpeed,
+            windGusts: stationData.windGusts,
+            qnh: stationData.qnh
+          };
+        }).filter(s => s != null);
 
         this.regionSelectorData = Object.keys(this.regions).map(key => {
           let region = this.regions[key];
