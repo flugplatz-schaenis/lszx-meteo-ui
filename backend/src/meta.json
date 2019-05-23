@@ -1,12 +1,16 @@
 {
   "regions": {
-    "alps": {
-      "title": "Ostschweiz / Alpen",
-      "stations": [ "KLO", "LAE", "HOE", "NAP", "PIL", "SAE", "WFJ", "COV", "JUN" ]
+    "east": {
+      "title": "Ostschweizer Alpen",
+      "stations": [ "KLO", "LAE", "STB", "HOE", "ARO", "SAE", "WFJ", "COV" ]
     },
-    "test": {
+    "central": {
+      "title": "Zentralschweizer Alpen",
+      "stations": [ "ALT", "ENG", "NAP", "PIL", "TIT", "JUN" ]
+    },
+    "jura": {
       "title": "Jura",
-      "stations": [ "CRM", "CHM", "CHA", "DOL" ]
+      "stations": [ "CRM", "CHM", "CHA", "DOL", "MLS" ]
     }
   },
   "stations": {
@@ -87,6 +91,42 @@
       "lat": 46.424789,
       "lon": 6.099461,
       "alt": 1671
+    },
+    "MLS": {
+      "name": "Le Moléson",
+      "lat": 46.546197,
+      "lon": 7.017758,
+      "alt": 1974
+    },
+    "ALT": {
+      "name": "Altdorf",
+      "lat": 46.887075,
+      "lon": 8.621889,
+      "alt": 438
+    },
+    "STB": {
+      "name": "Starkenbach",
+      "lat": 47.184869,
+      "lon": 9.250439,
+      "alt": 897
+    },
+    "TIT": {
+      "name": "Titlis",
+      "lat": 46.770508,
+      "lon": 8.425806,
+      "alt": 3040
+    },
+    "ENG": {
+      "name": "Engelberg",
+      "lat": 46.821642,
+      "lon": 8.410506,
+      "alt": 1036
+    },
+    "ARO": {
+      "name": "Arosa",
+      "lat": 46.792622,
+      "lon": 9.679003,
+      "alt": 1878
     }
   }
 }
