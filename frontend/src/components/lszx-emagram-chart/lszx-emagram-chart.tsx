@@ -4,7 +4,7 @@ import { scaleLinear, axisBottom, axisLeft, line, curveMonotoneX, range, ScaleLi
 import { calcWindParts, calcGradient } from "../../utils/utils";
 
 const margin: any = { left: 40, right: 10, top: 10, bottom: 20 };
-const heightFactor: number = 4/5;
+const heightFactor: number = 3.5/5;
 const minTemp: number = -40;
 const maxTemp: number = 40;
 const maxAlt: number = 4000;

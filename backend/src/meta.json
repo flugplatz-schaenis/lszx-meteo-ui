@@ -8,9 +8,9 @@
       "title": "Zentralschweizer Alpen",
       "stations": [ "ALT", "ENG", "NAP", "PIL", "TIT", "JUN" ]
     },
-    "jura": {
-      "title": "Jura",
-      "stations": [ "CRM", "CHM", "CHA", "DOL", "MLS" ]
+    "west": {
+      "title": "Westschweiz",
+      "stations": [ "CRM", "CHM", "DOL", "MLS", "DIA" ]
     }
   },
   "stations": {
@@ -80,11 +80,11 @@
       "lon": 76.978828,
       "alt": 1138
     },
-    "CHA": {
-      "name": "Chasseral",
-      "lat": 47.131753,
-      "lon": 7.054367,
-      "alt": 1596
+    "DIA": {
+      "name": "Les Diablerets",
+      "lat": 46.326747,
+      "lon": 7.203786,
+      "alt": 2964
     },
     "DOL": {
       "name": "La Dôle",
