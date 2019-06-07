@@ -88,7 +88,7 @@ export class LszxEmagram {
           let minAlt = 9999, maxAlt = 0,
               minAltTemp = 0, maxAltTemp = 0;
 
-          for(let stationKey of region.stations) {
+          for(let stationKey of region.summaryStations) {
             let station = this.stations[stationKey];
             let stationSnapshot = response[stationKey];
             if(!stationSnapshot)

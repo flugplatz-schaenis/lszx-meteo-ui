@@ -2,15 +2,18 @@
   "regions": {
     "east": {
       "title": "Ostschweizer Alpen",
-      "stations": [ "KLO", "LAE", "STB", "HOE", "ARO", "SAE", "WFJ", "COV" ]
+      "stations": [ "KLO", "LAE", "STB", "HOE", "ARO", "SAE", "WFJ", "COV" ],
+      "summaryStations": [ "LAE", "STB", "HOE", "ARO", "SAE", "WFJ", "COV" ]
     },
     "central": {
       "title": "Zentralschweizer Alpen",
-      "stations": [ "ALT", "ENG", "NAP", "PIL", "TIT", "JUN" ]
+      "stations": [ "ALT", "ENG", "NAP", "PIL", "TIT", "JUN" ],
+      "summaryStations": [ "ALT", "ENG", "NAP", "PIL", "TIT", "JUN" ]
     },
     "west": {
       "title": "Westschweiz",
-      "stations": [ "CRM", "CHM", "DOL", "MLS", "DIA" ]
+      "stations": [ "CRM", "CHM", "DOL", "MLS", "DIA" ],
+      "summaryStations": [ "CRM", "CHM", "DOL", "MLS", "DIA" ]
     }
   },
   "stations": {

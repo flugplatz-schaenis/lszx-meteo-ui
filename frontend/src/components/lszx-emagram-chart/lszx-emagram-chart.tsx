@@ -231,7 +231,7 @@ export class LszxEmagramChart {
 
       let windArrow = windArrows.append("g")
         .attr("class", "arrow")
-        .attr("transform", `translate(${x} ${y}) rotate(${-90 + s.windDirection})`);
+        .attr("transform", `translate(${x} ${y}) rotate(${+90 + s.windDirection})`);
 
       // base line
 
