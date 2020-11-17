@@ -27,7 +27,7 @@
 
       $stationKey = $parts[$stationIdx];
 
-      if($stationKey == "stn") { // this is the header row, get indices
+      if($stationKey == "Station/Location" || $stationKey == "stn") { // this is the header row, get indices
 
         $tempIdx = array_search(METEO_CSV_KEY_TEMP, $parts);
         $dewpointIdx = array_search(METEO_CSV_KEY_DEWPOINT, $parts);
