@@ -39,7 +39,7 @@
       }
       else if(array_search($stationKey, $stationKeys) !== FALSE) { // a station of interest
 
-        $dt = DateTime::createFromFormat("YmdHi", $parts[$timeIdx]);
+        $dt = DateTime::createFromFormat("YmdHi", $parts[$timeIdx], new DateTimeZone("Etc/UTC"));
         if($dt > $maxDt)
           $maxDt = $dt;
 
@@ -52,6 +52,7 @@
           "windGusts" => floatval($parts[$windGustsIdx]),
           "qnh" => floatval($parts[$qnhIdx])
         ];
+
       }
     }
     $line = strtok(METEO_CSV_LINEBREAK); // next line
@@ -84,7 +85,7 @@
   header('Content-Type: application/json');
   echo(json_encode([
     "result" => $exists ? "replaced" : "created",
-    "filename" => $filename,
+    "filename" => $filename, // vri (16.11.20) -> Result is always null, because $filename is not defined in this scope
     "maxDt" => $dt->format(DateTime::ATOM),
     "deleted" => count($snapshotToDelete)
   ]));

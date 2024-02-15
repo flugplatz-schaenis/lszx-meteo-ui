@@ -7,7 +7,7 @@
   $snapshotUrls =
     array_map(function($s) {
       $dtSubstring = substr($s, strlen(SNAPSHOT_PREFIX)+1, strlen($s) - strlen(SNAPSHOT_PREFIX) - 6);
-      $dt = DateTime::createFromFormat(SNAPSHOT_DATETIME_PATTERN, $dtSubstring);
+      $dt = DateTime::createFromFormat(SNAPSHOT_DATETIME_PATTERN, $dtSubstring, new DateTimeZone("Etc/UTC"));
       $dt->setTimezone(new DateTimeZone("Europe/Zurich"));
       return (object)[
         "dt" => $dt->format(DateTime::ATOM),
