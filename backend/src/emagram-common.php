@@ -10,15 +10,13 @@
   define("METEO_CSV_KEY_WINDGUSTS", "fu3010z1");
   define("METEO_CSV_KEY_QNH", "pp0qnhs0");
 
-  $dirPrefix = !isset($_REQUEST['cron']) ? "" : dirname(__FILE__) . DIRECTORY_SEPARATOR;
-
-  define("SNAPSHOT_DIR", $dirPrefix . "snapshots");
+  define("SNAPSHOT_DIR", "snapshots");
   define("SNAPSHOT_PREFIX", "stations-snapshot");
   define("SNAPSHOT_RETENTION", "PT24H"); // https://www.php.net/manual/de/datetime.sub.php
   define("SNAPSHOT_DATETIME_PATTERN", "Ymd-Hi");
 
   function getMeta() {
-    $metaFileContents = file_get_contents($dirPrefix . "meta.json");
+    $metaFileContents = file_get_contents("meta.json");
     return json_decode($metaFileContents);
   }
 
