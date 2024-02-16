@@ -66,7 +66,7 @@ export class LszxEmagram {
       .then(response => {
 
         this.chartData = this.regions[this.selectedRegion].stations.map(station => {
-          let stationMeta = this.stations[station] || { name: "", alt: 0 };
+          let stationMeta = this.stations[station] || { name: "", alt: 0 };
           let stationData = response[station];
           if(!stationData)
             return null;
@@ -118,7 +118,7 @@ export class LszxEmagram {
   }
 
   render() {
-    if(!this.snapshots || !this.regions || !this.chartData)
+    if(!this.snapshots || !this.regions || !this.chartData)
       return (<div>Loading...</div>);
 
     const xsScreen = this.w <= mobileModeWidthThreshold;
