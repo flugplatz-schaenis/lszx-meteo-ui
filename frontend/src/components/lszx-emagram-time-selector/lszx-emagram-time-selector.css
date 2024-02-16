@@ -1,17 +1,17 @@
 lszx-emagram-time-selector {
   display: block;
-  color: white;
+  color: #003a54;
 }
 
 .timeline line,
 .timeline path {
-  stroke: lightgrey;
+  stroke: #003a54;
   stroke-opacity: 0.5;
   shape-rendering: crispEdges;
 }
 
 .snapshotMarker rect {
-  fill: white;
+  fill: #003a54;;
 }
 
 .snapshotMarker rect.current {

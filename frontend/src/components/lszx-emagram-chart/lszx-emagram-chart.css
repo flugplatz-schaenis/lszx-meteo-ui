@@ -1,9 +1,9 @@
 lszx-emagram-chart {
-  color: white;
+  color: #003a54;
 }
 
 .grid line {
-  stroke: lightgrey;
+  stroke: #003a54;
   stroke-opacity: 0.5;
   shape-rendering: crispEdges;
 }
@@ -14,7 +14,7 @@ lszx-emagram-chart {
 
 .dryAdiabateGrid path {
   fill: none;
-  stroke: lightgreen;
+  stroke: #60aed3;
   stroke-opacity: 0.5;
 }
 
@@ -50,7 +50,7 @@ lszx-emagram-chart {
 .dewpointdata text {
   font-size: 12px;
   text-anchor: end;
-  fill: lightblue;
+  fill: #043a53;
 }
 
 .wind .arrow line  {
@@ -72,11 +72,11 @@ lszx-emagram-chart {
 }
 
 .stationtexts text {
-  fill: lightcyan;
+  fill: #043a53;
 }
 
 .stationtexts .textbg {
-  fill: #043a53;
+  fill: white;
   fill-opacity: 1;
 }
 
@@ -88,4 +88,9 @@ lszx-emagram-chart {
 
 .gradientValues text {
   fill: lightcyan;
+}
+
+.data-infotext {
+  fill: #909090;
+  font-size: 12px;
 }
