@@ -58,7 +58,8 @@
     $line = strtok(METEO_CSV_LINEBREAK); // next line
   }
 
-  $filePath = SNAPSHOT_DIR."/".getFilename($maxDt);
+  $filename = getFilename($maxDt);
+  $filePath = SNAPSHOT_DIR."/".$filename;
 
   // write file
   $exists = file_exists($filePath);
