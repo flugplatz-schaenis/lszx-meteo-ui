@@ -650,7 +650,7 @@ $(function()
 					ctx.closePath();
 					ctx.fillStyle=radgrad;ctx.fill();ctx.save();
 					//Label
-					var html='<span  class="valuelabel2" id="gaugeLabel99" style="position:absolute;text-align: center;display:block;width:30px;top:'+Math.floor(centerTop+radius/2+3)+'px;left:'+Math.floor(centerLeft-20)+'px;"><div>'+options.dircrvalue+'°</div></span>';
+					var html='<span  class="valuelabel2" id="gaugeLabel99" style="position:absolute;text-align: center;display:block;width:30px;top:'+Math.floor(centerTop+radius/2+3)+'px;left:'+Math.floor(centerLeft-20)+'px;"><div>'+options.dircrvalue+'&deg</div></span>';
 					placeholder.append(html);
 
 					// OTHER GAUGES
