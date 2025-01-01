@@ -107,19 +107,19 @@
     $wind_dir = !empty($wind_dir_arr)? round(reset($wind_dir_arr),0) : 0;
     
     $wind_speed_arr = searchKeyInNestedArray("wind_speed_avg_last_2_min", $array_live);
-    $wind_speed = !empty($wind_speed_arr)? meterspersecondToKph(reset($wind_speed_arr)) : 0;
+    $wind_speed = !empty($wind_speed_arr)? mphToKph(reset($wind_speed_arr)) : 0;
     
     $wind_speed_min_arr = searchKeyInNestedArray("wind_speed_avg", $array_historic);
-    $wind_speed_min = !empty($wind_speed_min_arr)? meterspersecondToKph(min($wind_speed_min_arr)) : 0;
+    $wind_speed_min = !empty($wind_speed_min_arr)? mphToKph(min($wind_speed_min_arr)) : 0;
     
     $wind_speed_max_arr = searchKeyInNestedArray("wind_speed_avg", $array_historic);
-    $wind_speed_max = !empty($wind_speed_max_arr)? meterspersecondToKph(max($wind_speed_max_arr)) : 0;
+    $wind_speed_max = !empty($wind_speed_max_arr)? mphToKph(max($wind_speed_max_arr)) : 0;
     
     $wind_gusts_arr = searchKeyInNestedArray("wind_speed_hi_last_10_min", $array_live);
-    $wind_gusts = !empty($wind_gusts_arr)? meterspersecondToKph(reset($wind_gusts_arr)) : 0;
+    $wind_gusts = !empty($wind_gusts_arr)? mphToKph(reset($wind_gusts_arr)) : 0;
     
     $wind_gusts_max_arr = searchKeyInNestedArray("wind_speed_hi", $array_historic);
-    $wind_gusts_max = !empty($wind_gusts_max_arr)? meterspersecondToKph(max($wind_gusts_max_arr)) : 0;
+    $wind_gusts_max = !empty($wind_gusts_max_arr)? mphToKph(max($wind_gusts_max_arr)) : 0;
     
     $rain_rate_arr = searchKeyInNestedArray("rain_rate_last_mm", $array_live);
     $rain_rate = !empty($rain_rate_arr)? round(max($rain_rate_arr), 1) : 0;
@@ -210,9 +210,9 @@
     return round($celsius, 1);
   }
 
-  function meterspersecondToKph($meterspersecond){
-    // Formula: 3.6 m/s = 1 kph
-    $kph = 3.6 * $meterspersecond;
+  function mphToKph($mph){
+    // 1 mile = 1.60934 kilometers
+    $kph = $mph * 1.60934;
     return round($kph,1);
   }
 
