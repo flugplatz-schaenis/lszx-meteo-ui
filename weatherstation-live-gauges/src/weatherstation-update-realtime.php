@@ -106,8 +106,6 @@
   $array_wind_dir = searchKeyInNestedArray("wind_dir_scalar_avg_last_2_min", $response_current_conditions_array);
   $array_rainfall = searchKeyInNestedArray("rainfall_daily_mm", $response_current_conditions_array);
 
-  // TODO use historic to get min and max value of day (temp, dewpoint, humidity, qnh)
-  // TODO Test Wind (when coding, all wind values were 0)
   // populate values for textfile output (file structure replicates legacy weather station raw data export format for gauge compatibility)
   $_0_date = convertTimestamp(!empty($array_timestamp)? reset($array_timestamp) : 0, 'Europe/Zurich', 'd.m.y');   // date
   $_1_time = convertTimestamp(!empty($array_timestamp)? reset($array_timestamp) : 0, 'Europe/Zurich', 'H:i:s');   // time
@@ -131,14 +129,14 @@
   $_19_qnh_dmin_t = "00:00";                                                                                      // time of recorded minimum QNH
   $_20_qnh_dmax = !empty($array_qnh_hist) ? inHgToMbar(max($array_qnh_hist)) : "0.0";                             // QNH in mbar, day maximum, 1 decimal place
   $_21_qnh_dmax_t = "00:00";                                                                                      // time of recorded maximum QNH
-  $_22_wind_v_act = !empty($array_wind_avg) ? round(reset($array_wind_avg),1) : "0.0";                            // wind in m/s, actual, 1 decimal place
+  $_22_wind_v_act = "0.0";                                                                                        // wind in m/s, actual, 1 decimal place
   $_23_wind_v_min_10 = "0.0";                                                                                     // wind in m/s, minimum last 10 minutes, 1 decimal place
-  $_24_wind_v_max_10 = "0.0";                                                                                     // wind in m/s, maximum last 10 minutes, 1 decimal place
+  $_24_wind_v_max_10 = !empty($array_wind_max_2) ? round(mphToMps(reset($array_wind_max_2)),1) : "0.0";           // wind in m/s, maximum last 10 minutes, 1 decimal place
   $_25_wind_v_min_60 = "0.0";                                                                                     // wind in m/s, minimum last 60 minutes, 1 decimal place
   $_26_wind_v_max_60 = "0.0";                                                                                     // wind in m/s, maximum last 60 minutes, 1 decimal place
-  $_27_wind_v_dmax = !empty($array_wind_hi_1hour) ? round(max($array_wind_hi_1hour),1) : "0.0";                   // wind in m/s, minimum day, 1 decimal place
+  $_27_wind_v_dmax = !empty($array_wind_hi_1hour) ? round(mphToMps(max($array_wind_hi_1hour)),1) : "0.0";         // wind in m/s, minimum day, 1 decimal place
   $_28_wind_v_dmax_t = "00:00";                                                                                   // time of recorded maximum day wind
-  $_29_wind_v_avg = !empty($array_wind_max_2) ? round(reset($array_wind_max_2),1) : "0.0";                        // average wind in m/s, actual, 1 decimal place
+  $_29_wind_v_avg = !empty($array_wind_avg) ? round(mphToMps(reset($array_wind_avg)),1) : "0.0";                  // average wind in m/s, actual, 1 decimal place
   $_30_wind_v_avg_dmax = "0.0";                                                                                   // average wind in m/s, day maximum, 1 decimal place
   $_31_wind_v_avg_dmax_t = "00:00";                                                                               // time of recorded maximum average wind
   $_32_wind_dir_act = "0";                                                                                        // wind direction in ° (0° = North), actual, integer
@@ -201,6 +199,12 @@
     // Conversion factor: 1 inHg = 33.8639 mbar
     $mbar = $inHg * 33.8639;
     return round($mbar, 1);
+  }
+
+  function mphToMps($mph) {
+    // 1 mile = 1609.34 meters
+    // 1 hour = 3600 seconds
+    return $mph * 1609.34 / 3600;
   }
 
   function convertTimestamp($unixtimestamp, $timezone, $output_format){
