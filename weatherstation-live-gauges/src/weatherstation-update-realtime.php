@@ -91,20 +91,20 @@
   // }
 
   
-  $array_timestamp = searchKeyInNestedArray("ts", $response_current_conditions_array);
-  $array_temp = searchKeyInNestedArray("temp", $response_current_conditions_array);
-  $array_temp_hist = searchKeyInNestedArray("temp_avg", $response_historic_array);
-  $array_dewpoint = searchKeyInNestedArray("dew_point", $response_current_conditions_array);
-  $array_dewpoint_hist = searchKeyInNestedArray("dew_point_last", $response_historic_array);
-  $array_hum = searchKeyInNestedArray("hum", $response_current_conditions_array);
-  $array_hum_hist = searchKeyInNestedArray("hum_last", $response_historic_array);
+  $array_timestamp = searchKeyInNestedArray("ts", $response_current_conditions_array, 1);
+  $array_temp = searchKeyInNestedArray("temp", $response_current_conditions_array, 1);
+  $array_temp_hist = searchKeyInNestedArray("temp_avg", $response_historic_array, 1);
+  $array_dewpoint = searchKeyInNestedArray("dew_point", $response_current_conditions_array, 1);
+  $array_dewpoint_hist = searchKeyInNestedArray("dew_point_last", $response_historic_array, 1);
+  $array_hum = searchKeyInNestedArray("hum", $response_current_conditions_array, 1);
+  $array_hum_hist = searchKeyInNestedArray("hum_last", $response_historic_array, 1);
   $array_qnh = searchKeyInNestedArray("bar_sea_level", $response_current_conditions_array);
   $array_qnh_hist = searchKeyInNestedArray("bar_sea_level", $response_historic_array);
-  $array_wind_avg = searchKeyInNestedArray("wind_speed_avg_last_2_min", $response_current_conditions_array);
-  $array_wind_max_2 = searchKeyInNestedArray("wind_speed_hi_last_2_min", $response_current_conditions_array);
-  $array_wind_hi_1hour = searchKeyInNestedArray("wind_speed_hi", $response_last_hour_array);
-  $array_wind_dir = searchKeyInNestedArray("wind_dir_scalar_avg_last_2_min", $response_current_conditions_array);
-  $array_rainfall = searchKeyInNestedArray("rainfall_daily_mm", $response_current_conditions_array);
+  $array_wind_avg = searchKeyInNestedArray("wind_speed_avg_last_2_min", $response_current_conditions_array, 3);
+  $array_wind_max_2 = searchKeyInNestedArray("wind_speed_hi_last_2_min", $response_current_conditions_array, 3);
+  $array_wind_hi_1hour = searchKeyInNestedArray("wind_speed_hi", $response_last_hour_array, 3);
+  $array_wind_dir = searchKeyInNestedArray("wind_dir_scalar_avg_last_2_min", $response_current_conditions_array, 3);
+  $array_rainfall = searchKeyInNestedArray("rainfall_daily_mm", $response_current_conditions_array, 1);
 
   // populate values for textfile output (file structure replicates legacy weather station raw data export format for gauge compatibility)
   $_0_date = convertTimestamp(!empty($array_timestamp)? reset($array_timestamp) : 0, 'Europe/Zurich', 'd.m.y');   // date
@@ -172,20 +172,25 @@
 
 
   // Recursive function to search for a key in an array
-  function searchKeyInNestedArray($key, $array) {
+  // If $force_sensor_id is passed, only values of that sensor ID are returned ("tx_id" is checked)
+  function searchKeyInNestedArray($key, $array, $force_sensor_id = null) {
     $results = [];
-    
+
     foreach ($array as $k => $v) {
-        if ($k === $key && $v != null) {
-            $results[] = $v;
+        // Condition: Either force_sensor_id is null (ignore tx_id) or tx_id matches
+        if (is_array($v) && (is_null($force_sensor_id) || (isset($v['tx_id']) && $v['tx_id'] === $force_sensor_id))) {
+            // If the key exists in this sub-array and is not null, add it to results
+            if (isset($v[$key]) && $v[$key] !== null) {
+                $results[] = $v[$key];
+            }
         }
-        
-        // If the value is an array, recursively search it
+
+        // Recursively search in nested arrays
         if (is_array($v)) {
-            $results = array_merge($results, searchKeyInNestedArray($key, $v));
+            $results = array_merge($results, searchKeyInNestedArray($key, $v, $force_sensor_id));
         }
     }
-    
+
     return $results;
   }
 
